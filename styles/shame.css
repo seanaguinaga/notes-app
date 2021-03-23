@@ -1,0 +1,20 @@
+ion-fab .ios {
+  display: none;
+}
+@media (min-width: 576px) {
+  ion-fab {
+    display: none;
+  }
+}
+/* BROKEN?
+let MobileIonFab = styled("ion-fab")`
+  .ios {
+    display: none;
+  }
+
+  .md {
+    ${media.sm`
+      display: none;
+    `}
+  }
+`; */
