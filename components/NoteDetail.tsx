@@ -10,6 +10,8 @@ const NoteDetail = ({ note }) => {
         id
         title
         text
+        ...NoteDetailText_note
+        ...NoteDetailTitle_note
       }
     `,
     note

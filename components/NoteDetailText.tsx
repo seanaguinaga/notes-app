@@ -2,10 +2,17 @@ import { InputChangeEventDetail } from "@ionic/core";
 import { IonTextarea } from "@ionic/react";
 import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
-import { noteTextFragment } from "../fragments/note";
 
 const NoteDetailText = ({ note, textInputRef }) => {
-  const data = useFragment(noteTextFragment, note);
+  const data = useFragment(
+    graphql`
+      fragment NoteDetailText_note on notes_app_notes {
+        id
+        text
+      }
+    `,
+    note
+  );
 
   const [commit, isInFlight] = useMutation(graphql`
     mutation NoteDetailTextMutation(
