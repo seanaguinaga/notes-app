@@ -14,7 +14,8 @@ const MessageListItem: React.FC<any> = ({ note }) => {
     graphql`
       fragment NotesListItem_note on notes_app_notes {
         id
-        ...noteText_note
+        title
+        text
         updated_at
         created_at
       }
