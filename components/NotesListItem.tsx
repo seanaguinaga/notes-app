@@ -1,7 +1,6 @@
 import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import styled from "styled-components";
-// import "./MessageListItem.css";
 
 let ListText = styled.p`
   overflow: hidden;
@@ -15,8 +14,7 @@ const MessageListItem: React.FC<any> = ({ note }) => {
     graphql`
       fragment NotesListItem_note on notes_app_notes {
         id
-        title
-        text
+        ...noteText_note
         updated_at
         created_at
       }

@@ -12,17 +12,21 @@ const NewNoteButtonIos = () => {
     }
   `);
 
+  const handleCompleted = (data: any) => {
+    if (router.query["note-id"]) {
+      router.replace(`${data.insert_notes_app_notes_one.id}`);
+    } else {
+      router.push(`${data.insert_notes_app_notes_one.id}`);
+    }
+  };
+
   return (
     <ion-button
+      disabled={isInFlight}
       onClick={() => {
         commit({
           variables: {},
-          onCompleted(data) {
-            router.replace(
-              `${data.insert_notes_app_notes_one.id}`,
-              `${data.insert_notes_app_notes_one.id}`
-            );
-          },
+          onCompleted: handleCompleted,
         });
       }}
     >

@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { fetchQuery } from "react-relay/hooks";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -12,8 +12,46 @@ let StyledIonlist = styled("ion-list")`
   max-width: 1024px;
 `;
 
+let NonMobileIonButtons = styled("ion-buttons")`
+  .ios {
+    display: none;
+  }
+
+  .md {
+    display: none;
+
+    ${media.sm`
+      display: block;
+    `}
+  }
+`;
 let NonMobileIonButton = styled("ion-button")`
-  color: red;
+  .ios {
+    display: none;
+  }
+
+  .md {
+    display: none;
+
+    ${media.sm`
+      display: block;
+    `}
+  }
+`;
+let NonMobileIonLabel = styled("ion-label")`
+  .ios {
+    display: none;
+  }
+
+  .md {
+    display: none;
+
+    ${media.sm`
+      display: block;
+    `}
+  }
+`;
+let NonMobileIcon = styled("ion-icon")`
   .ios {
     display: none;
   }
@@ -46,27 +84,30 @@ let StyledIonFooter = styled("ion-footer")`
 `;
 
 const Index = ({ notes_app_notes }) => {
+  useEffect(() => {
+    console.log(notes_app_notes);
+  }, [notes_app_notes]);
   return (
-    <>
+    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
       <ion-header>
         <ion-toolbar>
           <ion-title>Notes</ion-title>
-          <NonMobileIonButton slot="end" fill="clear">
-            <ion-icon slot="start" name="add-sharp" />
-            <ion-label>Create</ion-label>
-          </NonMobileIonButton>
+          <NonMobileIonButtons slot="end">
+            <NonMobileIonButton>
+              <NonMobileIcon slot="start" name="add-sharp" />
+              Create
+            </NonMobileIonButton>
+          </NonMobileIonButtons>
         </ion-toolbar>
       </ion-header>
-      <ion-content fullscreen>
+      <ion-content>
         <ion-header collapse="condense">
           <ion-toolbar>
             <ion-title size="large">Notes</ion-title>
           </ion-toolbar>
         </ion-header>
         <StyledIonlist>
-          <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
-            <NotesList notes={notes_app_notes} />
-          </Suspense>
+          <NotesList notes={notes_app_notes} />
         </StyledIonlist>
         <ion-fab horizontal="end" vertical="bottom" slot="fixed">
           <ion-fab-button>
@@ -81,7 +122,7 @@ const Index = ({ notes_app_notes }) => {
           </ion-buttons>
         </ion-toolbar>
       </StyledIonFooter>
-    </>
+    </Suspense>
   );
 };
 

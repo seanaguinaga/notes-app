@@ -1,17 +1,11 @@
+import { InputChangeEventDetail } from "@ionic/core";
 import { IonTextarea } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
+import { noteTextFragment } from "../fragments/note";
 
-const NoteDetailText = ({ note }) => {
-  const data = useFragment(
-    graphql`
-      fragment NoteDetailText_note on notes_app_notes {
-        id
-        text
-      }
-    `,
-    note
-  );
+const NoteDetailText = ({ note, textInputRef }) => {
+  const data = useFragment(noteTextFragment, note);
 
   const [commit, isInFlight] = useMutation(graphql`
     mutation NoteDetailTextMutation(
@@ -26,17 +20,19 @@ const NoteDetailText = ({ note }) => {
     }
   `);
 
-  let [text, setText] = useState(data.text);
-
-  useEffect(() => {
-    if (data.text === text) {
+  const handleChange = (e: CustomEvent<InputChangeEventDetail>) => {
+    if (isInFlight) {
       return;
     }
+    if (!e.detail.value) {
+      return;
+    }
+
     commit({
       optimisticUpdater: (store) => {
         const noteRecord = store.get(data.id);
         const currentText = noteRecord.getValue("text");
-        noteRecord.setValue(currentText ?? text, "text");
+        noteRecord.setValue(e.detail.value ?? currentText, "text");
         noteRecord.setValue(
           `${new Date(Date.now()).toISOString()}`,
           "updated_at"
@@ -45,42 +41,22 @@ const NoteDetailText = ({ note }) => {
       variables: {
         id: data.id,
         data: {
-          text,
+          text: e.detail.value,
           updated_at: `${new Date(Date.now()).toISOString()}`,
         },
       },
-      onCompleted(data) {
-        console.log(data);
-      },
-      onError(error) {
-        console.log(error);
-      },
     });
-  }, [text]);
-
-  useEffect(() => {
-    if (!isInFlight) {
-      let titleInput = document.getElementById(
-        "text-input"
-      ) as HTMLIonInputElement;
-      titleInput.setFocus();
-    }
-  }, [isInFlight]);
+  };
 
   return (
     <>
       <IonTextarea
         autoGrow
-        id="text-input"
-        disabled={isInFlight}
-        value={text}
+        value={data.text}
         placeholder="Text"
-        debounce={700}
-        onIonChange={(e) => {
-          if (!isInFlight) {
-            setText(e.detail.value);
-          }
-        }}
+        debounce={450}
+        onIonChange={handleChange}
+        ref={textInputRef}
       />
     </>
   );

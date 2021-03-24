@@ -1,14 +1,7 @@
-import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
 import { graphql, useFragment } from "react-relay/hooks";
-
-const NoteDetailTitle = dynamic(() => import("./NoteDetailTitle"), {
-  ssr: false,
-});
-
-const NoteDetailText = dynamic(() => import("./NoteDetailText"), {
-  ssr: false,
-});
+import NoteDetailText from "./NoteDetailText";
+import NoteDetailTitle from "./NoteDetailTitle";
 
 const NoteDetail = ({ note }) => {
   const data = useFragment(
@@ -16,40 +9,50 @@ const NoteDetail = ({ note }) => {
       fragment NoteDetail_note on notes_app_notes {
         id
         ...NoteDetailTitle_note
-        ...NoteDetailText_note
+        ...noteText_note
       }
     `,
     note
   );
 
-  const [formState, setFormState] = useState({
-    lastFocused: null,
-    lastUpdated: null,
-  });
+  const titleInputRef = useRef<HTMLIonInputElement | null>();
+  const textInputRef = useRef<HTMLIonInputElement | null>();
 
   const focusTitleInput = () => {
-    let titleInput = document.getElementById(
-      "title-input"
-    ) as HTMLIonInputElement;
-    titleInput.setFocus();
+    titleInputRef.current.setFocus();
   };
 
   const focusTextInput = () => {
-    let textInput = document.getElementById(
-      "text-input"
-    ) as HTMLIonInputElement;
-    textInput.setFocus();
+    textInputRef.current.setFocus();
   };
 
-  useEffect(() => {}, []);
+  // useEffect(() => {
+  //   if (data.title && data.text) {
+  //     // BOTH: maybe this is for reading - do nothing
+  //     return;
+  //   }
+  //   if (data.title && !data.text) {
+  //     // TITLE ONLY: maybe time to add text
+  //     focusTextInput();
+  //   }
+  //   if (!data.title && data.text) {
+  //     // TEXT ONLY: maybe time to add a title
+  //     focusTitleInput();
+  //   }
+  //   if (!data.title && !data.text) {
+  //     // NOTHING: probably add a title
+  //     focusTitleInput();
+  //     console.log("nothing");
+  //   }
+  // }, [data, textInputRef, titleInputRef]);
 
   return (
     <ion-list>
       <ion-item lines="none">
-        <NoteDetailTitle note={data} />
+        <NoteDetailTitle titleInputRef={titleInputRef} note={data} />
       </ion-item>
       <ion-item lines="none">
-        <NoteDetailText note={data} />
+        <NoteDetailText textInputRef={textInputRef} note={data} />
       </ion-item>
     </ion-list>
   );
