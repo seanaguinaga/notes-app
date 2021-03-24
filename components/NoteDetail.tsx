@@ -8,8 +8,8 @@ const NoteDetail = ({ note }) => {
     graphql`
       fragment NoteDetail_note on notes_app_notes {
         id
-        ...NoteDetailTitle_note
-        ...noteText_note
+        title
+        text
       }
     `,
     note
