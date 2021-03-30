@@ -1,19 +1,24 @@
 import React from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, usePreloadedQuery } from "react-relay";
 import NotesListItem from "./NotesListItem";
+import { NotesListQuery } from "./__generated__/NotesListQuery.graphql";
 
 const NotesList = ({ notes }) => {
-  const data = useFragment(
+  const data = usePreloadedQuery<NotesListQuery>(
     graphql`
-      fragment NotesList_notes on notes_app_notes @relay(plural: true) {
-        id
-        ...NotesListItem_note
+      query NotesListQuery {
+        notes_app_notes {
+          id
+          ...NotesListItem_note
+        }
       }
     `,
     notes
   );
 
-  return data?.map((note) => (
+  console.log(data);
+
+  return data?.notes_app_notes.map((note) => (
     <NotesListItem key={note.id as string} note={note} />
   ));
 };

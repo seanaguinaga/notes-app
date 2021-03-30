@@ -126,7 +126,7 @@ const Index = ({ notes_app_notes }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const environment = initEnvironment();
   const queryProps: Object = await fetchQuery(
     environment,
