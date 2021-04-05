@@ -16,7 +16,7 @@ const NotesList = ({ notes }) => {
     notes
   );
 
-  console.log(data);
+
 
   return data?.notes_app_notes.map((note) => (
     <NotesListItem key={note.id as string} note={note} />

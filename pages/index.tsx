@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { fetchQuery } from "react-relay/hooks";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -84,9 +84,9 @@ let StyledIonFooter = styled("ion-footer")`
 `;
 
 const Index = ({ notes_app_notes }) => {
-  useEffect(() => {
-    console.log(notes_app_notes);
-  }, [notes_app_notes]);
+  // useEffect(() => {
+  //   console.log(notes_app_notes);
+  // }, [notes_app_notes]);
   return (
     <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
       <ion-header>
