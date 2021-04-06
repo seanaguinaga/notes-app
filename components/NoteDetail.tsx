@@ -1,21 +1,30 @@
-import React, { useRef } from "react";
-import { graphql, useFragment } from "react-relay/hooks";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef } from "react";
+import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
 
 const NoteDetail = ({ note }) => {
-  const data = useFragment(
+  let router = useRouter();
+  router.query["note-id"];
+  useEffect(() => console.log("IN DETAIL", note), [note]);
+  const data = useLazyLoadQuery(
     graphql`
-      fragment NoteDetail_note on notes_app_notes {
-        id
-        title
-        text
-        ...NoteDetailText_note
-        ...NoteDetailTitle_note
+      query NoteDetailQuery($id: uuid!) {
+        notes_app_notes(where: { id: { _eq: $id } }) {
+          id
+          text
+          title
+          updated_at
+          created_at
+        }
       }
     `,
-    note
+    { id: router.query["note-id"] },
+    { fetchPolicy: "store-or-network" }
   );
+
+  useEffect(() => console.log("IN DETAIL DATA", data), [data]);
 
   const titleInputRef = useRef<HTMLIonInputElement | null>();
   const textInputRef = useRef<HTMLIonInputElement | null>();
@@ -51,10 +60,19 @@ const NoteDetail = ({ note }) => {
   return (
     <ion-list>
       <ion-item lines="none">
-        <NoteDetailTitle titleInputRef={titleInputRef} note={data} />
+        <NoteDetailTitle
+          titleInputRef={titleInputRef}
+          //@ts-expect-error
+          note={data.notes_app_notes[0]}
+        />
       </ion-item>
       <ion-item lines="none">
-        <NoteDetailText textInputRef={textInputRef} note={data} />
+        <NoteDetailText
+          textInputRef={textInputRef}
+          //@ts-expect-error
+
+          note={data.notes_app_notes[0]}
+        />
       </ion-item>
     </ion-list>
   );

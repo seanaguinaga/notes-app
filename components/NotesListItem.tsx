@@ -1,6 +1,7 @@
 import React from "react";
-import { graphql, useFragment } from "react-relay/hooks";
+import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import styled from "styled-components";
+import { NotesListItemQuery } from "./__generated__/NotesListItemQuery.graphql";
 
 let ListText = styled.p`
   overflow: hidden;
@@ -10,20 +11,26 @@ let ListText = styled.p`
 `;
 
 const MessageListItem: React.FC<any> = ({ note }) => {
-  const data = useFragment(
+  const data = useLazyLoadQuery<NotesListItemQuery>(
     graphql`
-      fragment NotesListItem_note on notes_app_notes {
-        id
-        title
-        text
-        updated_at
-        created_at
+      query NotesListItemQuery($id: uuid!) {
+        notes_app_notes(where: { id: { _eq: $id } }) {
+          id
+          text
+          title
+          updated_at
+          created_at
+        }
       }
     `,
-    note
+    { id: note.id },
+    { fetchPolicy: "store-or-network" }
   );
 
-  let displayDate = new Date(data.updated_at || (data.created_at as number));
+  let displayDate = new Date(
+    (data.notes_app_notes[0].updated_at as number) ||
+      (data.notes_app_notes[0].created_at as number)
+  );
 
   function isDateBeforeToday(date: Date) {
     return new Date(date.toDateString()) < new Date(new Date().toDateString());
@@ -35,15 +42,19 @@ const MessageListItem: React.FC<any> = ({ note }) => {
 
   return (
     <ion-item-sliding>
-      <ion-item href={`/${data.id}`} detail={false} lines="full">
+      <ion-item
+        href={`/${data.notes_app_notes[0].id}`}
+        detail={false}
+        lines="full"
+      >
         <ion-label class="ion-text-wrap">
           <h2>
-            {data.title || "Untitled"}
-            <span className="date">
+            {data.notes_app_notes[0].title || "Untitled"}
+            <span className="date ion-float-right">
               <ion-note>{timestamp}</ion-note>
             </span>
           </h2>
-          <ListText>{data.text ?? "Empty note"}</ListText>
+          <ListText>{data.notes_app_notes[0].text ?? "Empty note"}</ListText>
         </ion-label>
       </ion-item>
       <ion-item-options side="end">

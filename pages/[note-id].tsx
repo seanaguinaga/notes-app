@@ -1,13 +1,8 @@
-import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { Suspense, useState } from "react";
-import { fetchQuery } from "react-relay";
+import React, { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
-// import NoteDetail from "../components/NoteDetail";
-import { initEnvironment } from "../lib/relay";
-import IdNotePageQuery from "../queries/IdNotePage";
 import { media } from "../styles/media";
 
 let NoteDetail = dynamic(() => import("../components/NoteDetail"), {
@@ -51,10 +46,10 @@ let NonMobileIonButtons = styled("ion-buttons")`
   }
 `;
 
-const NotePage: React.FC<any> = ({ notes_app_notes_by_pk }) => {
+const NotePage: React.FC<any> = ({ notes_app_notes }) => {
   const router = useRouter();
 
-  // useEffect(() => console.log(notes_app_notes_by_pk), [notes_app_notes_by_pk]);
+  useEffect(() => console.log("ARRAY", notes_app_notes), [notes_app_notes]);
 
   const [showActionSheet, setShowActionSheet] = useState(false);
   return (
@@ -92,7 +87,7 @@ const NotePage: React.FC<any> = ({ notes_app_notes_by_pk }) => {
         </ion-toolbar>
       </ion-header>
       <StyledIonContent fullscreen>
-        <NoteDetail note={notes_app_notes_by_pk} />
+        <NoteDetail note={notes_app_notes?.[0]} />
       </StyledIonContent>
       <ion-fab horizontal="end" vertical="bottom" slot="fixed">
         <ion-fab-button>
@@ -114,19 +109,21 @@ const NotePage: React.FC<any> = ({ notes_app_notes_by_pk }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const environment = initEnvironment();
-  const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
-    id: query["note-id"],
-  }).toPromise();
-  const initialRecords = environment.getStore().getSource().toJSON();
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const environment = initEnvironment();
+//   const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
+//     id: query["note-id"],
+//   }).toPromise();
+//   const initialRecords = environment.getStore().getSource().toJSON();
 
-  return {
-    props: {
-      ...queryProps,
-      initialRecords,
-    },
-  };
-};
+//   console.log(initialRecords);
+
+//   return {
+//     props: {
+//       ...queryProps,
+//       initialRecords,
+//     },
+//   };
+// };
 
 export default NotePage;
