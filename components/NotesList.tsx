@@ -9,10 +9,7 @@ const NotesList: React.FC<any> = ({ notes }) => {
       query NotesListQuery {
         notes_app_notes {
           id
-          text
-          title
-          updated_at
-          created_at
+          ...NotesListItem_note
         }
       }
     `,
