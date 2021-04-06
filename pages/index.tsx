@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
-import { fetchQuery, graphql } from "react-relay";
+import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import NotesList from "../components/NotesList";
 import { initEnvironment } from "../lib/relay";
+import indexPageQuery from "../queries/indexPage";
 import { media } from "../styles/media";
 
 let StyledIonlist = styled("ion-list")`
@@ -129,17 +130,8 @@ export async function getServerSideProps() {
   const environment = initEnvironment();
   const queryProps: Object = await fetchQuery(
     environment,
-    graphql`
-      query pagesQuery {
-        notes_app_notes {
-          id
-          title
-          text
-          created_at
-          updated_at
-        }
-      }
-    `,
+    indexPageQuery,
+
     {}
   ).toPromise();
   const initialRecords = environment.getStore().getSource().toJSON();
