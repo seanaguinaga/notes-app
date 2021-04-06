@@ -1,13 +1,9 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useRef } from "react";
 import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
 
 const NoteDetail = ({ note }) => {
-  let router = useRouter();
-  router.query["note-id"];
-  useEffect(() => console.log("IN DETAIL", note), [note]);
   const data = useLazyLoadQuery(
     graphql`
       query NoteDetailQuery($id: uuid!) {
@@ -20,7 +16,7 @@ const NoteDetail = ({ note }) => {
         }
       }
     `,
-    { id: router.query["note-id"] },
+    { id: note.id },
     { fetchPolicy: "store-or-network" }
   );
 

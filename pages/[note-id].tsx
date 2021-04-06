@@ -1,8 +1,13 @@
+import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { Suspense, useEffect, useState } from "react";
+import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
+// import NoteDetail from "../components/NoteDetail";
+import { initEnvironment } from "../lib/relay";
+import IdNotePageQuery from "../queries/IdNotePage";
 import { media } from "../styles/media";
 
 let NoteDetail = dynamic(() => import("../components/NoteDetail"), {
@@ -109,21 +114,19 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const environment = initEnvironment();
-//   const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
-//     id: query["note-id"],
-//   }).toPromise();
-//   const initialRecords = environment.getStore().getSource().toJSON();
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const environment = initEnvironment();
+  const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
+    id: query["note-id"],
+  }).toPromise();
+  const initialRecords = environment.getStore().getSource().toJSON();
 
-//   console.log(initialRecords);
-
-//   return {
-//     props: {
-//       ...queryProps,
-//       initialRecords,
-//     },
-//   };
-// };
+  return {
+    props: {
+      ...queryProps,
+      initialRecords,
+    },
+  };
+};
 
 export default NotePage;
