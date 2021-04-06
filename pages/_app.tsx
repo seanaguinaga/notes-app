@@ -10,7 +10,7 @@ import "@ionic/core/css/text-transformation.css";
 import "@ionic/core/css/typography.css";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
 import React, { ReactNode, useEffect } from "react";
-import { ReactRelayContext } from "react-relay";
+import { RelayEnvironmentProvider } from "react-relay/hooks";
 import RootLayout from "../components/RootLayout";
 import { useEnvironment } from "../lib/relay";
 import "../styles/shame.css";
@@ -27,8 +27,8 @@ export default function App({ Component, pageProps }) {
     ((page: ReactNode) => <RootLayout children={page} />);
 
   return (
-    <ReactRelayContext.Provider value={{ environment }}>
+    <RelayEnvironmentProvider environment={environment}>
       {getLayout(<Component {...pageProps} />)}
-    </ReactRelayContext.Provider>
+    </RelayEnvironmentProvider>
   );
 }

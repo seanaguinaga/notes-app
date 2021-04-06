@@ -21,6 +21,7 @@
     "react": "0.0.0-experimental-a817840ea",
     "react-dom": "0.0.0-experimental-a817840ea",
     "react-relay": "^11.0.1",
+    "relay-nextjs": "0.0.1",
     "styled-components": "file:styled-components-5.2.0.tgz"
   },
   "devDependencies": {

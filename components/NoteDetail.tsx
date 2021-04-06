@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
@@ -19,8 +19,6 @@ const NoteDetail = ({ note }) => {
     { id: note.id },
     { fetchPolicy: "store-or-network" }
   );
-
-  useEffect(() => console.log("IN DETAIL DATA", data), [data]);
 
   const titleInputRef = useRef<HTMLIonInputElement | null>();
   const textInputRef = useRef<HTMLIonInputElement | null>();

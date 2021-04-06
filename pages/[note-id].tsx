@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -53,8 +53,6 @@ let NonMobileIonButtons = styled("ion-buttons")`
 
 const NotePage: React.FC<any> = ({ notes_app_notes }) => {
   const router = useRouter();
-
-  useEffect(() => console.log("ARRAY", notes_app_notes), [notes_app_notes]);
 
   const [showActionSheet, setShowActionSheet] = useState(false);
   return (

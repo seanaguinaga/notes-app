@@ -1,6 +1,6 @@
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonInput } from "@ionic/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { graphql, useLazyLoadQuery, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
 
@@ -10,7 +10,6 @@ let TitleInput = styled(IonInput)`
 `;
 
 const NoteDetailTitle = ({ note, titleInputRef }) => {
-  useEffect(() => console.log("TITLE", note), [note]);
   const data = useLazyLoadQuery(
     graphql`
       query NoteDetailTitleQuery($id: uuid!) {
@@ -23,8 +22,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
     { id: note.id },
     { fetchPolicy: "store-or-network" }
   );
-
-  useEffect(() => console.log("TITLE DATA", data), [data]);
 
   const [commit, isInFlight] = useMutation(graphql`
     mutation NoteDetailTitleMutation(
@@ -53,7 +50,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
       optimisticUpdater: (store) => {
         //@ts-ignore
         const noteRecord = store.get(data.notes_app_notes[0].id as string);
-        console.log("NOTE RECORD", noteRecord);
         const currentTitle = noteRecord.getValue("title");
         noteRecord.setValue(e.detail.value ?? currentTitle, "title");
         noteRecord.setValue(

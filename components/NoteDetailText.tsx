@@ -1,6 +1,6 @@
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonTextarea } from "@ionic/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { graphql, useLazyLoadQuery, useMutation } from "react-relay/hooks";
 import { NoteDetailTextQuery } from "./__generated__/NoteDetailTextQuery.graphql";
 
@@ -17,8 +17,6 @@ const NoteDetailText = ({ note, textInputRef }) => {
     { id: note.id },
     { fetchPolicy: "store-or-network" }
   );
-
-  useEffect(() => console.log("NOTE DETAIL TEST", data), [data]);
 
   const [commit, isInFlight] = useMutation(graphql`
     mutation NoteDetailTextMutation(
@@ -53,7 +51,6 @@ const NoteDetailText = ({ note, textInputRef }) => {
       //     "updated_at"
       //   );
       // },
-      onCompleted: (data) => console.log(data),
       variables: {
         //@ts-ignore
         id: data.notes_app_notes[0].id,

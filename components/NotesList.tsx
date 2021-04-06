@@ -1,10 +1,10 @@
 import React from "react";
-import { graphql, useLazyLoadQuery } from "react-relay";
+import { graphql, usePreloadedQuery } from "react-relay";
 import NotesListItem from "./NotesListItem";
 import { NotesListQuery } from "./__generated__/NotesListQuery.graphql";
 
 const NotesList: React.FC<any> = ({ notes }) => {
-  const data = useLazyLoadQuery<NotesListQuery>(
+  const data = usePreloadedQuery<NotesListQuery>(
     graphql`
       query NotesListQuery {
         notes_app_notes {
@@ -16,8 +16,7 @@ const NotesList: React.FC<any> = ({ notes }) => {
         }
       }
     `,
-    {},
-    { fetchPolicy: "store-or-network" }
+    notes
   );
 
   return (
