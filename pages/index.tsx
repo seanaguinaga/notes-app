@@ -131,7 +131,6 @@ export async function getServerSideProps() {
   const queryProps: Object = await fetchQuery(
     environment,
     indexPageQuery,
-
     {}
   ).toPromise();
   const initialRecords = environment.getStore().getSource().toJSON();
