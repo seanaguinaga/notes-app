@@ -1,7 +1,7 @@
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonInput } from "@ionic/react";
 import React from "react";
-import { graphql, useLazyLoadQuery, useMutation } from "react-relay/hooks";
+import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
 
 let TitleInput = styled(IonInput)`
@@ -10,17 +10,14 @@ let TitleInput = styled(IonInput)`
 `;
 
 const NoteDetailTitle = ({ note, titleInputRef }) => {
-  const data = useLazyLoadQuery(
+  const data = useFragment(
     graphql`
-      query NoteDetailTitleQuery($id: uuid!) {
-        notes_app_notes(where: { id: { _eq: $id } }) {
-          id
-          title
-        }
+      fragment NoteDetailTitle_note on notes_app_notes {
+        id
+        title
       }
     `,
-    { id: note.id },
-    { fetchPolicy: "store-or-network" }
+    note
   );
 
   const [commit, isInFlight] = useMutation(graphql`
@@ -48,8 +45,7 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
 
     commit({
       optimisticUpdater: (store) => {
-        //@ts-ignore
-        const noteRecord = store.get(data.notes_app_notes[0].id as string);
+        const noteRecord = store.get(data.id as string);
         const currentTitle = noteRecord.getValue("title");
         noteRecord.setValue(e.detail.value ?? currentTitle, "title");
         noteRecord.setValue(
@@ -59,8 +55,7 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
       },
 
       variables: {
-        //@ts-ignore
-        id: data?.notes_app_notes[0].id,
+        id: data.id,
         data: {
           title: e.detail.value,
           updated_at: `${new Date(Date.now()).toISOString()}`,
@@ -71,8 +66,7 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
 
   return (
     <TitleInput
-      //@ts-ignore
-      value={data?.notes_app_notes[0].title}
+      value={data.title}
       placeholder="Title"
       debounce={450}
       onIonChange={handleChange}

@@ -1,21 +1,17 @@
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonTextarea } from "@ionic/react";
 import React from "react";
-import { graphql, useLazyLoadQuery, useMutation } from "react-relay/hooks";
-import { NoteDetailTextQuery } from "./__generated__/NoteDetailTextQuery.graphql";
+import { graphql, useFragment, useMutation } from "react-relay/hooks";
 
 const NoteDetailText = ({ note, textInputRef }) => {
-  const data = useLazyLoadQuery<NoteDetailTextQuery>(
+  const data = useFragment(
     graphql`
-      query NoteDetailTextQuery($id: uuid!) {
-        notes_app_notes(where: { id: { _eq: $id } }) {
-          id
-          text
-        }
+      fragment NoteDetailText_note on notes_app_notes {
+        id
+        text
       }
     `,
-    { id: note.id },
-    { fetchPolicy: "store-or-network" }
+    note
   );
 
   const [commit, isInFlight] = useMutation(graphql`
@@ -42,18 +38,18 @@ const NoteDetailText = ({ note, textInputRef }) => {
     }
 
     commit({
-      // optimisticUpdater: (store) => {
-      //   const noteRecord = store.get(data.notes_app_notes[0].id as string);
-      //   const currentText = noteRecord.getValue("text");
-      //   noteRecord.setValue(e.detail.value ?? currentText, "text");
-      //   noteRecord.setValue(
-      //     `${new Date(Date.now()).toISOString()}`,
-      //     "updated_at"
-      //   );
-      // },
+      optimisticUpdater: (store) => {
+        const noteRecord = store.get(data.id as string);
+        const currentText = noteRecord.getValue("text");
+        noteRecord.setValue(e.detail.value ?? currentText, "text");
+        noteRecord.setValue(
+          `${new Date(Date.now()).toISOString()}`,
+          "updated_at"
+        );
+      },
       variables: {
         //@ts-ignore
-        id: data.notes_app_notes[0].id,
+        id: data.id,
         data: {
           text: e.detail.value,
           updated_at: `${new Date(Date.now()).toISOString()}`,
@@ -67,7 +63,7 @@ const NoteDetailText = ({ note, textInputRef }) => {
       <IonTextarea
         autoGrow
         //@ts-ignore
-        value={data.notes_app_notes[0].text}
+        value={data.text}
         placeholder="Text"
         debounce={450}
         onIonChange={handleChange}
