@@ -1,9 +1,8 @@
 import React, { Suspense } from "react";
-import { graphql } from "react-relay";
+import { fetchQuery, graphql } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import NotesList from "../components/NotesList";
-import prefetchQuery from "../lib/prefetchQuery";
 import { initEnvironment } from "../lib/relay";
 import { media } from "../styles/media";
 
@@ -128,8 +127,7 @@ const Index = ({ notes_app_notes }) => {
 
 export async function getServerSideProps() {
   const environment = initEnvironment();
-  console.log(environment);
-  const queryProps: Object = await prefetchQuery(
+  const queryProps: Object = await fetchQuery(
     environment,
     graphql`
       query pagesQuery {
@@ -141,8 +139,9 @@ export async function getServerSideProps() {
           updated_at
         }
       }
-    `
-  );
+    `,
+    {}
+  ).toPromise();
   const initialRecords = environment.getStore().getSource().toJSON();
 
   return {
