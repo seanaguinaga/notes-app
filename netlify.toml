@@ -1,0 +1,6 @@
+[build]
+  command = "npm run schema && npm run relay && npm run build"
+  publish = "out"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
