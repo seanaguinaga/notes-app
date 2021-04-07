@@ -55,12 +55,14 @@ const NoteDetail = ({ note }) => {
       <ion-item lines="none">
         <NoteDetailTitle
           titleInputRef={titleInputRef}
+          //@ts-ignore
           note={data.notes_app_notes[0]}
         />
       </ion-item>
       <ion-item lines="none">
         <NoteDetailText
           textInputRef={textInputRef}
+          //@ts-ignore
           note={data.notes_app_notes[0]}
         />
       </ion-item>
