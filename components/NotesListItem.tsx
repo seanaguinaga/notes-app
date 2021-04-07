@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import styled from "styled-components";
+import NotesListItemTitle from "./NotesListItemTitle";
 
 let ListText = styled.p`
   overflow: hidden;
@@ -14,14 +15,16 @@ const MessageListItem: React.FC<any> = ({ note }) => {
     graphql`
       fragment NotesListItem_note on notes_app_notes {
         id
-        text
-        title
+        ...NotesListItemTitle_note
+        ...NoteDetailText_note
         updated_at
         created_at
       }
     `,
     note
   );
+
+  useEffect(() => console.log(data), [data]);
 
   let displayDate = new Date(
     (data.updated_at as number) || (data.created_at as number)
@@ -40,7 +43,7 @@ const MessageListItem: React.FC<any> = ({ note }) => {
       <ion-item href={`/${data.id}`} detail={false} lines="full">
         <ion-label class="ion-text-wrap">
           <h2>
-            {data.title || "Untitled"}
+            <NotesListItemTitle note={data} />
             <span className="date ion-float-right">
               <ion-note>{timestamp}</ion-note>
             </span>

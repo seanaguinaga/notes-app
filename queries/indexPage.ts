@@ -4,8 +4,8 @@ export default graphql`
   query indexPageQuery {
     notes_app_notes {
       id
-      title
-      text
+      ...NoteDetailTitle_note
+      ...NoteDetailText_note
       created_at
       updated_at
     }
