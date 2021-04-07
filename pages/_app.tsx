@@ -22,14 +22,12 @@ const initialPreloadedQuery = getInitialPreloadedQuery({
 });
 
 export default function App({ Component, pageProps }) {
-  // const environment = useEnvironment(pageProps.initialRecords);
-
   const relayProps = getRelayProps(pageProps, initialPreloadedQuery);
   const env = relayProps.preloadedQuery?.environment ?? clientEnv!;
 
   useEffect(() => {
     ionDefineCustomElements(window);
-  });
+  }, []);
 
   const getLayout =
     Component.getLayout ||

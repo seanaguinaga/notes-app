@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { RelayProps, withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -84,9 +84,6 @@ let StyledIonFooter = styled("ion-footer")`
 `;
 
 const Index = (props: RelayProps<{}, any>) => {
-  useEffect(() => {
-    console.log(props);
-  }, [props]);
   return (
     <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
       <ion-header>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import styled from "styled-components";
 import NotesListItemTitle from "./NotesListItemTitle";
@@ -23,8 +23,6 @@ const MessageListItem: React.FC<any> = ({ note }) => {
     `,
     note
   );
-
-  useEffect(() => console.log(data), [data]);
 
   let displayDate = new Date(
     (data.updated_at as number) || (data.created_at as number)

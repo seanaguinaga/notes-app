@@ -1,6 +1,6 @@
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonInput } from "@ionic/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
 
@@ -19,10 +19,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
     `,
     note
   );
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const [commit, isInFlight] = useMutation(graphql`
     mutation NoteDetailTitleMutation(
