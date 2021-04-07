@@ -39,9 +39,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
     if (isInFlight) {
       return;
     }
-    if (!e.detail.value) {
-      return;
-    }
 
     commit({
       optimisticUpdater: (store) => {
@@ -53,7 +50,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
           "updated_at"
         );
       },
-
       variables: {
         id: data.id,
         data: {

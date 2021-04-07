@@ -33,9 +33,6 @@ const NoteDetailText = ({ note, textInputRef }) => {
     if (isInFlight) {
       return;
     }
-    if (!e.detail.value) {
-      return;
-    }
 
     commit({
       optimisticUpdater: (store) => {

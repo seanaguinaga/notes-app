@@ -45,7 +45,7 @@ const MessageListItem: React.FC<any> = ({ note }) => {
               <ion-note>{timestamp}</ion-note>
             </span>
           </h2>
-          <ListText>{data.text ?? "Empty note"}</ListText>
+          <ListText>{data.text || "Empty note"}</ListText>
         </ion-label>
       </ion-item>
       <ion-item-options side="end">
