@@ -11,12 +11,21 @@ import "@ionic/core/css/typography.css";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
 import React, { ReactNode, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay/hooks";
+import { getInitialPreloadedQuery, getRelayProps } from "relay-nextjs/app";
 import RootLayout from "../components/RootLayout";
-import { useEnvironment } from "../lib/relay";
+import { getClientEnvironment } from "../lib/client_enviroment";
 import "../styles/shame.css";
 
+const clientEnv = getClientEnvironment();
+const initialPreloadedQuery = getInitialPreloadedQuery({
+  createClientEnvironment: () => getClientEnvironment()!,
+});
+
 export default function App({ Component, pageProps }) {
-  const environment = useEnvironment(pageProps.initialRecords);
+  // const environment = useEnvironment(pageProps.initialRecords);
+
+  const relayProps = getRelayProps(pageProps, initialPreloadedQuery);
+  const env = relayProps.preloadedQuery?.environment ?? clientEnv!;
 
   useEffect(() => {
     ionDefineCustomElements(window);
@@ -27,8 +36,8 @@ export default function App({ Component, pageProps }) {
     ((page: ReactNode) => <RootLayout children={page} />);
 
   return (
-    <RelayEnvironmentProvider environment={environment}>
-      {getLayout(<Component {...pageProps} />)}
+    <RelayEnvironmentProvider environment={env}>
+      {getLayout(<Component {...pageProps} {...relayProps} />)}
     </RelayEnvironmentProvider>
   );
 }

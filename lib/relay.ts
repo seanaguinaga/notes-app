@@ -5,11 +5,11 @@ let relayEnvironment: Environment | undefined;
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise
-async function fetchQuery(
+export async function fetchQuery(
   operation: any,
   variables: any,
-  _cacheConfig: any,
-  _uploadables: any
+  _cacheConfig?: any,
+  _uploadables?: any
 ) {
   const response = await fetch(process.env.NEXT_PUBLIC_HASURA_ENDPOINT, {
     method: "POST",
