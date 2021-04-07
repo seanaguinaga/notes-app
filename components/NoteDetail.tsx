@@ -1,15 +1,19 @@
 import React, { useRef } from "react";
-import { graphql, useFragment } from "react-relay/hooks";
+import { graphql, usePreloadedQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
 
 const NoteDetail = ({ note }) => {
-  const data = useFragment(
+  const data = usePreloadedQuery(
     graphql`
-      fragment NoteDetail_note on notes_app_notes {
-        id
-        ...NoteDetailText_note
-        ...NoteDetailTitle_note
+      query NoteDetailQuery($id: uuid!) {
+        notes_app_notes(where: { id: { _eq: $id } }) {
+          id
+          ...NoteDetailTitle_note
+          ...NoteDetailText_note
+          updated_at
+          created_at
+        }
       }
     `,
     note
@@ -49,10 +53,16 @@ const NoteDetail = ({ note }) => {
   return (
     <ion-list>
       <ion-item lines="none">
-        <NoteDetailTitle titleInputRef={titleInputRef} note={data} />
+        <NoteDetailTitle
+          titleInputRef={titleInputRef}
+          note={data.notes_app_notes[0]}
+        />
       </ion-item>
       <ion-item lines="none">
-        <NoteDetailText textInputRef={textInputRef} note={data} />
+        <NoteDetailText
+          textInputRef={textInputRef}
+          note={data.notes_app_notes[0]}
+        />
       </ion-item>
     </ion-list>
   );

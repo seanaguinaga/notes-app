@@ -49,7 +49,14 @@
 // }
 
 // src/pages/_document.tsx
-import NextDocument, { DocumentContext, Head, Html } from "next/document";
+import NextDocument, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document";
+import React from "react";
 import { createRelayDocument, RelayDocument } from "relay-nextjs/document";
 
 interface DocumentProps {
@@ -66,7 +73,7 @@ class MyDocument extends NextDocument<DocumentProps> {
         enhanceApp: (App) => relayDocument.enhance(App),
       });
 
-    const initialProps = await MyDocument.getInitialProps(ctx);
+    const initialProps = await NextDocument.getInitialProps(ctx);
 
     return {
       ...initialProps,
@@ -83,7 +90,10 @@ class MyDocument extends NextDocument<DocumentProps> {
           {/* ... */}
           <relayDocument.Script />
         </Head>
-        {/* ... */}
+        <body>
+          <Main />
+          <NextScript />
+        </body>
       </Html>
     );
   }

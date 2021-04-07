@@ -5,7 +5,7 @@ import { Environment, Network, RecordSource, Store } from "relay-runtime";
 
 export function createClientNetwork() {
   return Network.create(async (params, variables) => {
-    const response = await fetch("/api/graphql", {
+    const response = await fetch(process.env.NEXT_PUBLIC_HASURA_ENDPOINT, {
       method: "POST",
       credentials: "include",
       headers: {

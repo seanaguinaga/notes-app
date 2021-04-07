@@ -1,12 +1,10 @@
-import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { Suspense, useState } from "react";
-import { fetchQuery } from "react-relay";
+import { withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
-// import NoteDetail from "../components/NoteDetail";
-import { initEnvironment } from "../lib/relay";
+import { getClientEnvironment } from "../lib/client_enviroment";
 import IdNotePageQuery from "../queries/IdNotePage";
 import { media } from "../styles/media";
 
@@ -51,7 +49,7 @@ let NonMobileIonButtons = styled("ion-buttons")`
   }
 `;
 
-const NotePage: React.FC<any> = ({ notes_app_notes }) => {
+const NotePage: React.FC<any> = (props) => {
   const router = useRouter();
 
   const [showActionSheet, setShowActionSheet] = useState(false);
@@ -90,7 +88,7 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
         </ion-toolbar>
       </ion-header>
       <StyledIonContent fullscreen>
-        <NoteDetail note={notes_app_notes?.[0]} />
+        <NoteDetail note={props.preloadedQuery} />
       </StyledIonContent>
       <ion-fab horizontal="end" vertical="bottom" slot="fixed">
         <ion-fab-button>
@@ -112,19 +110,58 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const environment = initEnvironment();
-  const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
-    id: query["note-id"],
-  }).toPromise();
-  const initialRecords = environment.getStore().getSource().toJSON();
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const environment = initEnvironment();
+//   const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
+//     id: query["note-id"],
+//   }).toPromise();
+//   const initialRecords = environment.getStore().getSource().toJSON();
 
-  return {
-    props: {
-      ...queryProps,
-      initialRecords,
+//   return {
+//     props: {
+//       ...queryProps,
+//       initialRecords,
+//     },
+//   };
+// };
+
+export default withRelay(NotePage, IdNotePageQuery, {
+  // This property is optional.
+  error: null,
+  // Fallback to render while the page is loading.
+  // This property is optional.
+  fallback: <ion-progress-bar type="indeterminate" />,
+  // Create a Relay environment on the client-side.
+  // Note: This function must always return the same value.
+  createClientEnvironment: () => getClientEnvironment()!,
+  // Gets server side props for the page.
+  // serverSideProps: async (ctx) => {
+  //   // This is an example of getting an auth token from the request context.
+  //   // If you don't need to authenticate users this can be removed and return an
+  //   // empty object instead.
+  //   const { getTokenFromCtx } = await import("lib/server/auth");
+  //   const token = await getTokenFromCtx(ctx);
+  //   if (token == null) {
+  //     return {
+  //       redirect: { destination: "/login", permanent: false },
+  //     };
+  //   }
+
+  //   return { token };
+  // },
+  // Server-side props can be accessed as the second argument
+  // to this function.
+  createServerEnvironment: async ({ query }) =>
+    // ctx,
+    // The object returned from serverSideProps. If you don't need a token
+    // you can remove this argument.
+    // { token }: { token: string }
+    {
+      let id = query["note-id"];
+
+      const { createServerEnvironment } = await import(
+        "../lib/server_environment"
+      );
+      return createServerEnvironment({ variables: { id } });
     },
-  };
-};
-
-export default NotePage;
+});

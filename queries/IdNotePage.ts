@@ -4,7 +4,10 @@ export default graphql`
   query IdNotePageQuery($id: uuid!) {
     notes_app_notes(where: { id: { _eq: $id } }) {
       id
-      ...NoteDetail_note
+      title
+      text
+      updated_at
+      created_at
     }
   }
 `;

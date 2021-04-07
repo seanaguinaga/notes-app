@@ -8,8 +8,8 @@ import {
 } from "relay-runtime";
 import { fetchQuery } from "./relay";
 
-export function createServerNetwork() {
-  return Network.create(async (text, variables) => {
+export function createServerNetwork({ variables }) {
+  return Network.create(async (text) => {
     const results = await fetchQuery(text, variables);
 
     const data = JSON.parse(
@@ -22,9 +22,9 @@ export function createServerNetwork() {
 }
 
 // Optional: this function can take a token used for authentication and pass it into `createServerNetwork`.
-export function createServerEnvironment() {
+export function createServerEnvironment({ variables }) {
   return new Environment({
-    network: createServerNetwork(),
+    network: createServerNetwork({ variables }),
     store: new Store(new RecordSource()),
     isServer: true,
   });

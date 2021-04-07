@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { RelayProps, withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -83,10 +83,10 @@ let StyledIonFooter = styled("ion-footer")`
   }
 `;
 
-const Index = ({ notes_app_notes }: RelayProps<{}, any>) => {
-  // useEffect(() => {
-  //   console.log(notes_app_notes);
-  // }, [notes_app_notes]);
+const Index = (props: RelayProps<{}, any>) => {
+  useEffect(() => {
+    console.log(props);
+  }, [props]);
   return (
     <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
       <ion-header>
@@ -107,7 +107,7 @@ const Index = ({ notes_app_notes }: RelayProps<{}, any>) => {
           </ion-toolbar>
         </ion-header>
         <StyledIonlist>
-          <NotesList notes={notes_app_notes} />
+          <NotesList notes={props.preloadedQuery} />
         </StyledIonlist>
         <ion-fab horizontal="end" vertical="bottom" slot="fixed">
           <ion-fab-button>
@@ -160,6 +160,6 @@ export default withRelay(Index, indexPageQuery, {
       const { createServerEnvironment } = await import(
         "../lib/server_environment"
       );
-      return createServerEnvironment();
+      return createServerEnvironment({ variables: null });
     },
 });
