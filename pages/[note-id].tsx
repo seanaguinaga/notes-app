@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -56,7 +56,7 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
 
   const [showActionSheet, setShowActionSheet] = useState(false);
   return (
-    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
+    <>
       <ion-header translucent>
         <ion-toolbar>
           <ion-buttons>
@@ -108,7 +108,7 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
         showActionSheet={showActionSheet}
         setShowActionSheet={setShowActionSheet}
       />
-    </Suspense>
+    </>
   );
 };
 

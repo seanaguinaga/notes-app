@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import React, { Suspense } from "react";
+import React from "react";
 import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
@@ -89,7 +89,7 @@ const Index = ({ notes_app_notes }) => {
   //   console.log(notes_app_notes);
   // }, [notes_app_notes]);
   return (
-    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
+    <>
       <ion-header>
         <ion-toolbar>
           <ion-title>Notes</ion-title>
@@ -123,7 +123,7 @@ const Index = ({ notes_app_notes }) => {
           </ion-buttons>
         </ion-toolbar>
       </StyledIonFooter>
-    </Suspense>
+    </>
   );
 };
 

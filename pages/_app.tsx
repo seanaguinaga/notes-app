@@ -9,7 +9,7 @@ import "@ionic/core/css/text-alignment.css";
 import "@ionic/core/css/text-transformation.css";
 import "@ionic/core/css/typography.css";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, Suspense, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay/hooks";
 import RootLayout from "../components/RootLayout";
 import { useEnvironment } from "../lib/relay";
@@ -22,13 +22,24 @@ export default function App({ Component, pageProps }) {
     ionDefineCustomElements(window);
   });
 
+  useEffect(() => console.log("Changed"), [environment]);
+
   const getLayout =
     Component.getLayout ||
     ((page: ReactNode) => <RootLayout children={page} />);
 
   return (
     <RelayEnvironmentProvider environment={environment}>
-      {getLayout(<Component {...pageProps} />)}
+      <Suspense
+        fallback={
+          <ion-progress-bar
+            type="indeterminate"
+            style={{ position: "absolute", bottom: 0 }}
+          />
+        }
+      >
+        {getLayout(<Component {...pageProps} />)}
+      </Suspense>
     </RelayEnvironmentProvider>
   );
 }
