@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import React, { Suspense } from "react";
 import { fetchQuery } from "react-relay";
 import styled from "styled-components";
@@ -126,7 +127,9 @@ const Index = ({ notes_app_notes }) => {
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let cookies = context.req.cookies;
+  // How do i pass cookies into this query?
   const environment = initEnvironment();
   const queryProps: Object = await fetchQuery(
     environment,
@@ -141,6 +144,6 @@ export async function getServerSideProps() {
       initialRecords,
     },
   };
-}
+};
 
 export default Index;
