@@ -32,8 +32,6 @@ const NoteDetail = ({ note }) => {
     textInputRef.current.setFocus();
   };
 
-  useEffect(() => console.log(data), [data]);
-
   // useEffect(() => {
   //   if (data.title && data.text) {
   //     // BOTH: maybe this is for reading - do nothing
@@ -60,14 +58,14 @@ const NoteDetail = ({ note }) => {
         <NoteDetailTitle
           titleInputRef={titleInputRef}
           //@ts-ignore
-          note={data?.notes_app_notes[0]}
+          note={data?.notes_app_notes?.[0]}
         />
       </ion-item>
       <ion-item lines="none">
         <NoteDetailText
           textInputRef={textInputRef}
           //@ts-ignore
-          note={data?.notes_app_notes[0]}
+          note={data?.notes_app_notes?.[0]}
         />
       </ion-item>
     </ion-list>

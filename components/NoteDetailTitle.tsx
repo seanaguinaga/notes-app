@@ -40,6 +40,10 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
       return;
     }
 
+    if (e.detail.value === data.title) {
+      return;
+    }
+
     commit({
       optimisticUpdater: (store) => {
         const noteRecord = store.get(data.id as string);

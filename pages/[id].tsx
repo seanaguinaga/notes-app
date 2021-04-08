@@ -5,6 +5,7 @@ import { withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import { getClientEnvironment } from "../lib/client_enviroment";
+import { createServerEnvironment } from "../lib/server_environment";
 import IdNotePageQuery from "../queries/IdNotePage";
 import { media } from "../styles/media";
 
@@ -158,14 +159,6 @@ export default withRelay(NotePage, IdNotePageQuery, {
     // you can remove this argument.
     // { token }: { token: string }
     {
-      console.log(query);
-      let id = query["note-id"];
-
-      console.log(id);
-
-      const { createServerEnvironment } = await import(
-        "../lib/server_environment"
-      );
-      return createServerEnvironment({ variables: { id } });
+      return createServerEnvironment();
     },
 });

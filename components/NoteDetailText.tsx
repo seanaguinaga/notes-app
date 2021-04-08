@@ -34,6 +34,10 @@ const NoteDetailText = ({ note, textInputRef }) => {
       return;
     }
 
+    if (e.detail.value === data.text) {
+      return;
+    }
+
     commit({
       optimisticUpdater: (store) => {
         const noteRecord = store.get(data.id as string);
