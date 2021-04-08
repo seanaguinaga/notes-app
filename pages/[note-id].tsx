@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { Suspense, useState } from "react";
 import { withRelay } from "relay-nextjs";
 import styled from "styled-components";
@@ -51,8 +50,6 @@ let NonMobileIonButtons = styled("ion-buttons")`
 `;
 
 const NotePage: React.FC<any> = (props) => {
-  const router = useRouter();
-
   const [showActionSheet, setShowActionSheet] = useState(false);
   return (
     <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
@@ -90,7 +87,9 @@ const NotePage: React.FC<any> = (props) => {
         </ion-toolbar>
       </ion-header>
       <StyledIonContent fullscreen>
-        <NoteDetail note={props.preloadedQuery} />
+        <Suspense fallback="loading">
+          <NoteDetail note={props.preloadedQuery} />
+        </Suspense>
       </StyledIonContent>
       <ion-fab horizontal="end" vertical="bottom" slot="fixed">
         <ion-fab-button>
@@ -159,6 +158,7 @@ export default withRelay(NotePage, IdNotePageQuery, {
     // you can remove this argument.
     // { token }: { token: string }
     {
+      console.log(query);
       let id = query["note-id"];
 
       console.log(id);

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { graphql, usePreloadedQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
@@ -19,6 +19,8 @@ const NoteDetail = ({ note }) => {
     note
   );
 
+  useEffect(() => console.log(data), [data]);
+
   const titleInputRef = useRef<HTMLIonInputElement | null>();
   const textInputRef = useRef<HTMLIonInputElement | null>();
 
@@ -29,6 +31,8 @@ const NoteDetail = ({ note }) => {
   const focusTextInput = () => {
     textInputRef.current.setFocus();
   };
+
+  useEffect(() => console.log(data), [data]);
 
   // useEffect(() => {
   //   if (data.title && data.text) {
@@ -56,14 +60,14 @@ const NoteDetail = ({ note }) => {
         <NoteDetailTitle
           titleInputRef={titleInputRef}
           //@ts-ignore
-          note={data?.notes_app_notes?.[0]}
+          note={data?.notes_app_notes[0]}
         />
       </ion-item>
       <ion-item lines="none">
         <NoteDetailText
           textInputRef={textInputRef}
           //@ts-ignore
-          note={data?.notes_app_notes?.[0]}
+          note={data?.notes_app_notes[0]}
         />
       </ion-item>
     </ion-list>
