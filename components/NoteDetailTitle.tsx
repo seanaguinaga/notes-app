@@ -54,7 +54,6 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
           "updated_at"
         );
       },
-      onCompleted: (response) => console.log(response),
       variables: {
         id: data.id,
         data: {
