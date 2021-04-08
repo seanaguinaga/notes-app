@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { fetchQuery } from "react-relay";
@@ -60,15 +61,16 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
       <ion-header translucent>
         <ion-toolbar>
           <ion-buttons>
-            <ion-button slot="start" onClick={() => router.back()}>
-              <ion-icon
-                slot="start"
-                ios="chevron-back-outline"
-                md="arrow-back-sharp"
-              ></ion-icon>
-              <ion-label>Notes</ion-label>
-            </ion-button>
-            <ion-back-button text="Notes" defaultHref="/home"></ion-back-button>
+            <Link href="/">
+              <ion-button slot="start" onClick={() => router.back()}>
+                <ion-icon
+                  slot="start"
+                  ios="chevron-back-outline"
+                  md="arrow-back-sharp"
+                ></ion-icon>
+                <ion-label>Notes</ion-label>
+              </ion-button>
+            </Link>
           </ion-buttons>
           <ion-buttons slot="end">
             <MobileAndIosButton
@@ -115,7 +117,7 @@ const NotePage: React.FC<any> = ({ notes_app_notes }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const environment = initEnvironment();
   const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
-    id: query["note-id"],
+    id: query.id,
   }).toPromise();
   const initialRecords = environment.getStore().getSource().toJSON();
 
