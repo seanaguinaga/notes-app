@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import styled from "styled-components";
+import { NotesListItemText_note$key } from "./__generated__/NotesListItemText_note.graphql";
 
 let ListText = styled.p`
   overflow: hidden;
@@ -9,7 +10,11 @@ let ListText = styled.p`
   white-space: nowrap;
 `;
 
-const NotesListItemText: React.FC<any> = ({ note }) => {
+interface NotesListItemTextProps {
+  note: NotesListItemText_note$key;
+}
+
+const NotesListItemText: React.FC<NotesListItemTextProps> = ({ note }) => {
   const data = useFragment(
     graphql`
       fragment NotesListItemText_note on notes_app_notes {

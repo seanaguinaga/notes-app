@@ -2,8 +2,18 @@ import { InputChangeEventDetail } from "@ionic/core";
 import { IonTextarea } from "@ionic/react";
 import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
+import { NoteDetailTextMutation } from "./__generated__/NoteDetailTextMutation.graphql";
+import { NoteDetailText_note$key } from "./__generated__/NoteDetailText_note.graphql";
 
-const NoteDetailText = ({ note, textInputRef }) => {
+interface NoteDetailTextProps {
+  note: NoteDetailText_note$key;
+  textInputRef: React.MutableRefObject<HTMLIonTextareaElement>;
+}
+
+const NoteDetailText: React.FC<NoteDetailTextProps> = ({
+  note,
+  textInputRef,
+}) => {
   const data = useFragment(
     graphql`
       fragment NoteDetailText_note on notes_app_notes {
@@ -14,7 +24,7 @@ const NoteDetailText = ({ note, textInputRef }) => {
     note
   );
 
-  const [commit, isInFlight] = useMutation(graphql`
+  const [commit, isInFlight] = useMutation<NoteDetailTextMutation>(graphql`
     mutation NoteDetailTextMutation(
       $id: uuid!
       $data: notes_app_notes_set_input
@@ -49,7 +59,6 @@ const NoteDetailText = ({ note, textInputRef }) => {
         );
       },
       variables: {
-        //@ts-ignore
         id: data.id,
         data: {
           text: e.detail.value,
@@ -60,16 +69,14 @@ const NoteDetailText = ({ note, textInputRef }) => {
   };
 
   return (
-    <>
-      <IonTextarea
-        autoGrow
-        value={data?.text}
-        placeholder="Text"
-        debounce={450}
-        onIonChange={handleChange}
-        ref={textInputRef}
-      />
-    </>
+    <IonTextarea
+      autoGrow
+      value={data?.text}
+      placeholder="Text"
+      debounce={450}
+      onIonChange={handleChange}
+      ref={textInputRef}
+    />
   );
 };
 

@@ -3,13 +3,23 @@ import { IonInput } from "@ionic/react";
 import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
+import { NoteDetailTitleMutation } from "./__generated__/NoteDetailTitleMutation.graphql";
+import { NoteDetailTitle_note$key } from "./__generated__/NoteDetailTitle_note.graphql";
 
 let TitleInput = styled(IonInput)`
   font-size: 22px;
   font-weight: 700;
 `;
 
-const NoteDetailTitle = ({ note, titleInputRef }) => {
+interface NoteDetailTitleProps {
+  note: NoteDetailTitle_note$key;
+  titleInputRef: React.MutableRefObject<HTMLIonInputElement>;
+}
+
+const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
+  note,
+  titleInputRef,
+}) => {
   const data = useFragment(
     graphql`
       fragment NoteDetailTitle_note on notes_app_notes {
@@ -20,7 +30,7 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
     note
   );
 
-  const [commit, isInFlight] = useMutation(graphql`
+  const [commit, isInFlight] = useMutation<NoteDetailTitleMutation>(graphql`
     mutation NoteDetailTitleMutation(
       $id: uuid!
       $data: notes_app_notes_set_input

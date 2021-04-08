@@ -3,8 +3,13 @@ import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import NotesListItemText from "./NotesListItemText";
 import NotesListItemTitle from "./NotesListItemTitle";
+import { NotesListItem_note$key } from "./__generated__/NotesListItem_note.graphql";
 
-const MessageListItem: React.FC<any> = ({ note }) => {
+interface NotesListItemProps {
+  note: NotesListItem_note$key;
+}
+
+const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
   const data = useFragment(
     graphql`
       fragment NotesListItem_note on notes_app_notes {
@@ -58,4 +63,4 @@ const MessageListItem: React.FC<any> = ({ note }) => {
   );
 };
 
-export default MessageListItem;
+export default NotesListItem;

@@ -1,15 +1,12 @@
 import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
-import styled from "styled-components";
+import { NotesListItemTitle_note$key } from "./__generated__/NotesListItemTitle_note.graphql";
 
-let ListText = styled.p`
-  overflow: hidden;
-  max-width: 75ch;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
+interface NotesListItemTitleProps {
+  note: NotesListItemTitle_note$key;
+}
 
-const NotesListItemTitle: React.FC<any> = ({ note }) => {
+const NotesListItemTitle: React.FC<NotesListItemTitleProps> = ({ note }) => {
   const data = useFragment(
     graphql`
       fragment NotesListItemTitle_note on notes_app_notes {
@@ -20,7 +17,7 @@ const NotesListItemTitle: React.FC<any> = ({ note }) => {
     note
   );
 
-  return data?.title || "Untitled";
+  return <>{data?.title || "Untitled"}</>;
 };
 
 export default NotesListItemTitle;
