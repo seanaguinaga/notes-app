@@ -63,7 +63,7 @@ const NoteDetailTitle = ({ note, titleInputRef }) => {
 
   return (
     <TitleInput
-      value={data.title}
+      value={data?.title}
       placeholder="Title"
       debounce={450}
       onIonChange={handleChange}

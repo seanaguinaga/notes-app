@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import styled from "styled-components";
@@ -38,17 +39,19 @@ const MessageListItem: React.FC<any> = ({ note }) => {
 
   return (
     <ion-item-sliding>
-      <ion-item href={`/${data.id}`} detail={false} lines="full">
-        <ion-label class="ion-text-wrap">
-          <h2>
-            <NotesListItemTitle note={data} />
-            <span className="date ion-float-right">
-              <ion-note>{timestamp}</ion-note>
-            </span>
-          </h2>
-          <ListText>{data.text || "Empty note"}</ListText>
-        </ion-label>
-      </ion-item>
+      <Link href={`/${data.id}`}>
+        <ion-item detail={false} lines="full">
+          <ion-label class="ion-text-wrap">
+            <h2>
+              <NotesListItemTitle note={data} />
+              <span className="date ion-float-right">
+                <ion-note>{timestamp}</ion-note>
+              </span>
+            </h2>
+            <ListText>{data.text || "Empty note"}</ListText>
+          </ion-label>
+        </ion-item>
+      </Link>
       <ion-item-options side="end">
         <ion-item-option
           color="danger"

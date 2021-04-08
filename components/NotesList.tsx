@@ -18,7 +18,7 @@ const NotesList: React.FC<any> = ({ notes }) => {
 
   return (
     <>
-      {data.notes_app_notes.map((note) => (
+      {data?.notes_app_notes?.map((note) => (
         <NotesListItem key={note.id as string} note={note} />
       ))}
     </>

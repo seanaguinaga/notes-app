@@ -20,7 +20,7 @@ const NotesListItemTitle: React.FC<any> = ({ note }) => {
     note
   );
 
-  return data.title || "Untitled";
+  return data?.title || "Untitled";
 };
 
 export default NotesListItemTitle;

@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Suspense, useState } from "react";
 import { withRelay } from "relay-nextjs";
@@ -58,15 +59,16 @@ const NotePage: React.FC<any> = (props) => {
       <ion-header translucent>
         <ion-toolbar>
           <ion-buttons>
-            <ion-button slot="start" onClick={() => router.back()}>
-              <ion-icon
-                slot="start"
-                ios="chevron-back-outline"
-                md="arrow-back-sharp"
-              ></ion-icon>
-              <ion-label>Notes</ion-label>
-            </ion-button>
-            <ion-back-button text="Notes" defaultHref="/home"></ion-back-button>
+            <Link href="/">
+              <ion-button slot="start">
+                <ion-icon
+                  slot="start"
+                  ios="chevron-back-outline"
+                  md="arrow-back-sharp"
+                ></ion-icon>
+                <ion-label>Notes</ion-label>
+              </ion-button>
+            </Link>
           </ion-buttons>
           <ion-buttons slot="end">
             <MobileAndIosButton
@@ -158,6 +160,8 @@ export default withRelay(NotePage, IdNotePageQuery, {
     // { token }: { token: string }
     {
       let id = query["note-id"];
+
+      console.log(id);
 
       const { createServerEnvironment } = await import(
         "../lib/server_environment"
