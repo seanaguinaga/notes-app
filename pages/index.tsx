@@ -157,6 +157,6 @@ export default withRelay(Index, indexPageQuery, {
       const { createServerEnvironment } = await import(
         "../lib/server_environment"
       );
-      return createServerEnvironment({ variables: null });
+      return createServerEnvironment();
     },
 });
