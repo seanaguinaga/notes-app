@@ -36,8 +36,6 @@ const NewNoteButtonIos = () => {
   );
 };
 
-<<<<<<< HEAD
-=======
 // const MyButton = React.forwardRef(({ onClick, href }, ref) => {
 //   return (
 //     <ion-button href={href} onClick={onClick} ref={ref}>
@@ -46,5 +44,4 @@ const NewNoteButtonIos = () => {
 //   );
 // });
 
->>>>>>> parent of d9dc82d (try this)
 export default NewNoteButtonIos;
