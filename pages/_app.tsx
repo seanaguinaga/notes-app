@@ -11,23 +11,16 @@ import "@ionic/core/css/typography.css";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
 import React, { ReactNode, Suspense, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay/hooks";
-import { getInitialPreloadedQuery, getRelayProps } from "relay-nextjs/app";
 import RootLayout from "../components/RootLayout";
-import { getClientEnvironment } from "../lib/client_enviroment";
+import { useEnvironment } from "../lib/relay";
 import "../styles/shame.css";
 
-const clientEnv = getClientEnvironment();
-const initialPreloadedQuery = getInitialPreloadedQuery({
-  createClientEnvironment: () => getClientEnvironment()!,
-});
-
 export default function App({ Component, pageProps }) {
-  const relayProps = getRelayProps(pageProps, initialPreloadedQuery);
-  const env = relayProps.preloadedQuery?.environment ?? clientEnv!;
+  const environment = useEnvironment(pageProps.initialRecords);
 
   useEffect(() => {
     ionDefineCustomElements(window);
-  }, []);
+  });
 
   useEffect(() => console.log("Changed"), [environment]);
 
@@ -36,7 +29,6 @@ export default function App({ Component, pageProps }) {
     ((page: ReactNode) => <RootLayout children={page} />);
 
   return (
-<<<<<<< HEAD
     <RelayEnvironmentProvider environment={environment}>
       <Suspense
         fallback={
@@ -48,10 +40,6 @@ export default function App({ Component, pageProps }) {
       >
         {getLayout(<Component {...pageProps} />)}
       </Suspense>
-=======
-    <RelayEnvironmentProvider environment={env}>
-      {getLayout(<Component {...pageProps} {...relayProps} />)}
->>>>>>> with-relay-nextjs
     </RelayEnvironmentProvider>
   );
 }

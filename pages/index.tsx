@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 import { GetServerSideProps } from "next";
 import React from "react";
 import { fetchQuery } from "react-relay";
-=======
-import React, { Suspense } from "react";
-import { RelayProps, withRelay } from "relay-nextjs";
->>>>>>> with-relay-nextjs
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import NotesList from "../components/NotesList";
-import { getClientEnvironment } from "../lib/client_enviroment";
+import { initEnvironment } from "../lib/relay";
 import indexPageQuery from "../queries/indexPage";
 import { media } from "../styles/media";
 
@@ -89,7 +84,10 @@ let StyledIonFooter = styled("ion-footer")`
   }
 `;
 
-const Index = (props: RelayProps<{}, any>) => {
+const Index = ({ notes_app_notes }) => {
+  // useEffect(() => {
+  //   console.log(notes_app_notes);
+  // }, [notes_app_notes]);
   return (
     <>
       <ion-header>
@@ -110,7 +108,7 @@ const Index = (props: RelayProps<{}, any>) => {
           </ion-toolbar>
         </ion-header>
         <StyledIonlist>
-          <NotesList notes={props.preloadedQuery} />
+          <NotesList notes={notes_app_notes} />
         </StyledIonlist>
         <ion-fab horizontal="end" vertical="bottom" slot="fixed">
           <ion-fab-button>
@@ -128,41 +126,24 @@ const Index = (props: RelayProps<{}, any>) => {
     </>
   );
 };
-export default withRelay(Index, indexPageQuery, {
-  // This property is optional.
-  error: null,
-  // Fallback to render while the page is loading.
-  // This property is optional.
-  fallback: <ion-progress-bar type="indeterminate" />,
-  // Create a Relay environment on the client-side.
-  // Note: This function must always return the same value.
-  createClientEnvironment: () => getClientEnvironment()!,
-  // Gets server side props for the page.
-  // serverSideProps: async (ctx) => {
-  //   // This is an example of getting an auth token from the request context.
-  //   // If you don't need to authenticate users this can be removed and return an
-  //   // empty object instead.
-  //   const { getTokenFromCtx } = await import("lib/server/auth");
-  //   const token = await getTokenFromCtx(ctx);
-  //   if (token == null) {
-  //     return {
-  //       redirect: { destination: "/login", permanent: false },
-  //     };
-  //   }
 
-  //   return { token };
-  // },
-  // Server-side props can be accessed as the second argument
-  // to this function.
-  createServerEnvironment: async () =>
-    // ctx,
-    // The object returned from serverSideProps. If you don't need a token
-    // you can remove this argument.
-    // { token }: { token: string }
-    {
-      const { createServerEnvironment } = await import(
-        "../lib/server_environment"
-      );
-      return createServerEnvironment();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let cookies = context.req.cookies;
+  // How do i pass cookies into this query?
+  const environment = initEnvironment();
+  const queryProps: Object = await fetchQuery(
+    environment,
+    indexPageQuery,
+    {}
+  ).toPromise();
+  const initialRecords = environment.getStore().getSource().toJSON();
+
+  return {
+    props: {
+      ...queryProps,
+      initialRecords,
     },
-});
+  };
+};
+
+export default Index;

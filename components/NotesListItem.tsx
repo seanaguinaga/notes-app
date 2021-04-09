@@ -1,21 +1,22 @@
 import Link from "next/link";
 import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
-import NotesListItemText from "./NotesListItemText";
-import NotesListItemTitle from "./NotesListItemTitle";
-import { NotesListItem_note$key } from "./__generated__/NotesListItem_note.graphql";
+import styled from "styled-components";
 
-interface NotesListItemProps {
-  note: NotesListItem_note$key;
-}
+let ListText = styled.p`
+  overflow: hidden;
+  max-width: 75ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
-const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
+const MessageListItem: React.FC<any> = ({ note }) => {
   const data = useFragment(
     graphql`
       fragment NotesListItem_note on notes_app_notes {
         id
-        ...NotesListItemTitle_note
-        ...NotesListItemText_note
+        text
+        title
         updated_at
         created_at
       }
@@ -41,12 +42,12 @@ const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
         <ion-item detail={false} lines="full">
           <ion-label class="ion-text-wrap">
             <h2>
-              <NotesListItemTitle note={data} />
+              {data.title || "Untitled"}
               <span className="date ion-float-right">
                 <ion-note>{timestamp}</ion-note>
               </span>
             </h2>
-            <NotesListItemText note={data} />
+            <ListText>{data.text || "Empty note"}</ListText>
           </ion-label>
         </ion-item>
       </Link>
@@ -63,4 +64,4 @@ const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
   );
 };
 
-export default NotesListItem;
+export default MessageListItem;

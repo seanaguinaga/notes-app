@@ -18,7 +18,6 @@ module.exports = {
     return config;
   },
   target: "serverless",
-  projectRoot: __dirname,
   reactStrictMode: true,
   experimental: {
     reactMode: "concurrent",
