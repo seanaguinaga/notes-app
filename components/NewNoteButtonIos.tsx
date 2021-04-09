@@ -43,4 +43,15 @@ const NewNoteButtonIos = () => {
 //   );
 // });
 
+{
+  /* <Link
+  href={{
+    pathname: "/blog/[slug]",
+    query: { slug: "my-post" },
+  }}
+>
+  <a>Blog Post</a>
+</Link>; */
+}
+
 export default NewNoteButtonIos;
