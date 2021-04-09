@@ -40,3 +40,7 @@ _Why styled-components tgz?_
 Check out first unreleased feature!
 
 https://github.com/styled-components/styled-components/blob/master/CHANGELOG.md
+
+_Feat. relay-nextjs_
+
+https://github.com/RevereCRE/relay-nextjs
