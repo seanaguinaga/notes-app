@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-import { GetServerSideProps } from "next";
-import React from "react";
-import { fetchQuery } from "react-relay";
-=======
 import React, { Suspense } from "react";
 import { RelayProps, withRelay } from "relay-nextjs";
->>>>>>> with-relay-nextjs
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import NotesList from "../components/NotesList";
@@ -91,7 +85,7 @@ let StyledIonFooter = styled("ion-footer")`
 
 const Index = (props: RelayProps<{}, any>) => {
   return (
-    <>
+    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
       <ion-header>
         <ion-toolbar>
           <ion-title>Notes</ion-title>
@@ -125,7 +119,7 @@ const Index = (props: RelayProps<{}, any>) => {
           </ion-buttons>
         </ion-toolbar>
       </StyledIonFooter>
-    </>
+    </Suspense>
   );
 };
 export default withRelay(Index, indexPageQuery, {
