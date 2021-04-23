@@ -40,3 +40,9 @@ _Why styled-components tgz?_
 Check out first unreleased feature!
 
 https://github.com/styled-components/styled-components/blob/master/CHANGELOG.md
+
+_Styles are broken with Web Components when built - works fine when served!_
+
+This appears to be a bug with styled-components - hoping v6 makes css-in-js for Web Components viable!
+
+Until then, I used css modules for a button or two, but it is not fun to work with.
