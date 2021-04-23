@@ -112,21 +112,6 @@ const NotePage: React.FC<any> = (props) => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const environment = initEnvironment();
-//   const queryProps: Object = await fetchQuery(environment, IdNotePageQuery, {
-//     id: query["note-id"],
-//   }).toPromise();
-//   const initialRecords = environment.getStore().getSource().toJSON();
-
-//   return {
-//     props: {
-//       ...queryProps,
-//       initialRecords,
-//     },
-//   };
-// };
-
 export default withRelay(NotePage, IdNotePageQuery, {
   // This property is optional.
   error: null,
@@ -153,7 +138,7 @@ export default withRelay(NotePage, IdNotePageQuery, {
   // },
   // Server-side props can be accessed as the second argument
   // to this function.
-  createServerEnvironment: async ({ query }) =>
+  createServerEnvironment: async () =>
     // ctx,
     // The object returned from serverSideProps. If you don't need a token
     // you can remove this argument.
