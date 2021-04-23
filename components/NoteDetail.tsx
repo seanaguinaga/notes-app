@@ -18,13 +18,15 @@ const NoteDetail = ({ note }) => {
   const titleInputRef = useRef<HTMLIonInputElement | null>();
   const textInputRef = useRef<HTMLIonInputElement | null>();
 
-  const focusTitleInput = () => {
-    titleInputRef.current.setFocus();
-  };
+  // Do I even want to do this focusing?
 
-  const focusTextInput = () => {
-    textInputRef.current.setFocus();
-  };
+  // const focusTitleInput = () => {
+  //   titleInputRef.current.setFocus();
+  // };
+
+  // const focusTextInput = () => {
+  //   textInputRef.current.setFocus();
+  // };
 
   // useEffect(() => {
   //   if (data.title && data.text) {

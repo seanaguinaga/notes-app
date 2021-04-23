@@ -59,7 +59,6 @@ const NoteDetailText = ({ note, textInputRef }) => {
     <>
       <IonTextarea
         autoGrow
-        //@ts-ignore
         value={data.text}
         placeholder="Text"
         debounce={450}

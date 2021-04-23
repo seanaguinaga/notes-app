@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import { fetchQuery } from "react-relay";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
-// import NoteDetail from "../components/NoteDetail";
 import { initEnvironment } from "../lib/relay";
 import IdNotePageQuery from "../queries/IdNotePage";
 import { media } from "../styles/media";

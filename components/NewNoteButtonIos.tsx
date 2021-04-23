@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import { graphql, useMutation } from "react-relay";
 
+// This is the only "create" button that currently works
+
 const NewNoteButtonIos = () => {
   let router = useRouter();
 
@@ -35,13 +37,5 @@ const NewNoteButtonIos = () => {
     </ion-button>
   );
 };
-
-// const MyButton = React.forwardRef(({ onClick, href }, ref) => {
-//   return (
-//     <ion-button href={href} onClick={onClick} ref={ref}>
-//       Click Me
-//     </ion-button>
-//   );
-// });
 
 export default NewNoteButtonIos;

@@ -85,9 +85,6 @@ let StyledIonFooter = styled("ion-footer")`
 `;
 
 const Index = ({ notes_app_notes }) => {
-  // useEffect(() => {
-  //   console.log(notes_app_notes);
-  // }, [notes_app_notes]);
   return (
     <>
       <ion-header>
@@ -127,9 +124,7 @@ const Index = ({ notes_app_notes }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let cookies = context.req.cookies;
-  // How do i pass cookies into this query?
+export const getServerSideProps: GetServerSideProps = async () => {
   const environment = initEnvironment();
   const queryProps: Object = await fetchQuery(
     environment,

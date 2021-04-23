@@ -55,6 +55,7 @@ const MessageListItem: React.FC<any> = ({ note }) => {
         <ion-item-option
           color="danger"
           expandable
+          // TODO
           // onClick={() => deleteNote(note.id)}
         >
           Delete

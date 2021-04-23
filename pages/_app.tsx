@@ -22,8 +22,6 @@ export default function App({ Component, pageProps }) {
     ionDefineCustomElements(window);
   });
 
-  useEffect(() => console.log("Changed"), [environment]);
-
   const getLayout =
     Component.getLayout ||
     ((page: ReactNode) => <RootLayout children={page} />);
