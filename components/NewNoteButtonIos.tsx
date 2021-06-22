@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
-import React from "react";
-import { graphql, useMutation } from "react-relay";
+import React, { useState } from "react";
+import { ConnectionHandler, graphql, useMutation } from "react-relay";
 import { NewNoteButtonIosMutation } from "./__generated__/NewNoteButtonIosMutation.graphql";
 
 const NewNoteButtonIos = () => {
   let router = useRouter();
+
+  let [newNoteID, setNewNoteID] = useState("");
 
   let [commit, isInFlight] = useMutation<NewNoteButtonIosMutation>(graphql`
     mutation NewNoteButtonIosMutation {
@@ -15,6 +17,7 @@ const NewNoteButtonIos = () => {
   `);
 
   let handleCompleted = (data: any) => {
+    setNewNoteID(data.insert_notes_app_notes_one.id);
     if (router.query.id) {
       router.replace(`${data.insert_notes_app_notes_one.id}`);
     } else {
@@ -26,6 +29,28 @@ const NewNoteButtonIos = () => {
     commit({
       variables: {},
       onCompleted: handleCompleted,
+      updater: (store) => {
+        const noteRecord = store.get(newNoteID);
+        const connectionRecord = ConnectionHandler.getConnection(
+          noteRecord,
+          "NotesListQuery_notes_app_notes"
+        );
+
+        // Get the payload returned from the server
+        const payload = store.getRootField("comment_create");
+
+        // Get the edge inside the payload
+        const serverEdge = payload.getLinkedRecord("comment_edge");
+
+        // Build edge for adding to the connection
+        const newEdge = ConnectionHandler.buildConnectionEdge(
+          store,
+          connectionRecord,
+          serverEdge
+        );
+        ConnectionHandler.insertEdgeAfter(connectionRecord, newEdge);
+        // ...
+      },
     });
 
   return (
