@@ -34,6 +34,7 @@ const NewNoteButtonIos = () => {
         const connectionRecord = ConnectionHandler.getConnection(
           noteRecord,
           "NotesListQuery_notes_app_notes"
+          // Where do I find this? ^^^
         );
 
         // Get the payload returned from the server
@@ -48,6 +49,7 @@ const NewNoteButtonIos = () => {
           connectionRecord,
           serverEdge
         );
+
         ConnectionHandler.insertEdgeAfter(connectionRecord, newEdge);
         // ...
       },
