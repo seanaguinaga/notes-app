@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { ConnectionHandler, graphql, useMutation } from "react-relay";
+import { graphql, useMutation } from "react-relay";
 import { NewNoteButtonIosMutation } from "./__generated__/NewNoteButtonIosMutation.graphql";
 
 const NewNoteButtonIos = () => {
@@ -30,29 +30,8 @@ const NewNoteButtonIos = () => {
       variables: {},
       onCompleted: handleCompleted,
       updater: (store) => {
-        const noteRecord = store.get(newNoteID);
-        const connectionRecord = ConnectionHandler.getConnection(
-          noteRecord,
-          "NotesListQuery_notes_app_notes"
-          // Where do I find this? ^^^
-        );
-
-        // Get the payload returned from the server
-        const payload = store.getRootField("comment_create");
-
-        // Get the edge inside the payload
-        const serverEdge = payload.getLinkedRecord("comment_edge");
-
-        // Build edge for adding to the connection
-        const newEdge = ConnectionHandler.buildConnectionEdge(
-          store,
-          connectionRecord,
-          serverEdge
-        );
-
-        ConnectionHandler.insertEdgeAfter(connectionRecord, newEdge);
-        // ...
-      },
+      store.create(newNoteID, "notes_app_notes");
+      }
     });
 
   return (
