@@ -16,7 +16,7 @@
     "@ionic/core": "^5.6.3",
     "@ionic/react": "^5.6.3",
     "graphql": "^15.5.0",
-    "ionicons": "^5.5.1",
+    "ionicons": "^5.5.2",
     "next": "latest",
     "react": "0.0.0-experimental-172e89b4b",
     "react-dom": "0.0.0-experimental-172e89b4b",

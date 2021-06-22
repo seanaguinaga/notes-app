@@ -1,19 +1,16 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import React, { Suspense, useState } from "react";
-import { withRelay } from "relay-nextjs";
+import React from "react";
+import { usePreloadedQuery } from "react-relay";
+import { RelayProps, withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import { getClientEnvironment } from "../lib/client_enviroment";
-import { createServerEnvironment } from "../lib/server_environment";
-import IdNotePageQuery from "../queries/IdNotePage";
+import NotePageQuery from "../queries/NotePageQuery";
+import { NotePageQuery as TNotePageQuery } from "../queries/__generated__//NotePageQuery.graphql";
 import { media } from "../styles/media";
 
 let NoteDetail = dynamic(() => import("../components/NoteDetail"), {
-  ssr: false,
-});
-
-const ActionSheet = dynamic(() => import("../components/ActionSheet"), {
   ssr: false,
 });
 
@@ -50,77 +47,83 @@ let NonMobileIonButtons = styled("ion-buttons")`
   }
 `;
 
-const NotePage: React.FC<any> = (props) => {
-  const [showActionSheet, setShowActionSheet] = useState(false);
-  return (
-    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
-      <ion-header translucent>
-        <ion-toolbar>
-          <ion-buttons>
-            <Link href="/">
-              <ion-button slot="start">
-                <ion-icon
-                  slot="start"
-                  ios="chevron-back-outline"
-                  md="arrow-back-sharp"
-                ></ion-icon>
-                <ion-label>Notes</ion-label>
-              </ion-button>
-            </Link>
-          </ion-buttons>
-          <ion-buttons slot="end">
-            <MobileAndIosButton
-              onClick={() => setShowActionSheet(true)}
-              slot="end"
-              fill="clear"
-            >
-              <ion-icon
-                md="ellipsis-vertical-sharp"
-                ios="ellipsis-horizontal-circle-outline"
-              ></ion-icon>
-            </MobileAndIosButton>
-          </ion-buttons>
-          <NonMobileIonButtons slot="end">
-            <ion-button color="danger" fill="clear">
-              <ion-label>Delete</ion-label>
-            </ion-button>
-          </NonMobileIonButtons>
-        </ion-toolbar>
-      </ion-header>
-      <StyledIonContent fullscreen>
-        <Suspense fallback="loading">
-          <NoteDetail note={props.preloadedQuery} />
-        </Suspense>
-      </StyledIonContent>
-      <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button>
-          <ion-icon ios="add-outline" md="add-sharp" />
-        </ion-fab-button>
-      </ion-fab>
-      <StyledIonFooter>
-        <ion-toolbar>
-          <ion-buttons slot="end">
-            <NewNoteButtonIos />
-          </ion-buttons>
-        </ion-toolbar>
-      </StyledIonFooter>
-      <ActionSheet
-        showActionSheet={showActionSheet}
-        setShowActionSheet={setShowActionSheet}
-      />
-    </Suspense>
-  );
-};
+let MobileIonFab = styled("ion-fab")`
+  right: calc(10px + var(--ion-safe-area-right, 0px));
+  bottom: 10px;
 
-export default withRelay(NotePage, IdNotePageQuery, {
-  // This property is optional.
-  error: null,
+  .ios {
+    display: none;
+  }
+
+  .md {
+    ${media.sm`
+      display: none;
+    `}
+  }
+`;
+
+const NotePage: React.FC<RelayProps<Record<string, unknown>, TNotePageQuery>> =
+  ({ preloadedQuery }) => {
+    let data = usePreloadedQuery<TNotePageQuery>(NotePageQuery, preloadedQuery);
+
+    return (
+      <>
+        <ion-header translucent>
+          <ion-toolbar>
+            <ion-buttons>
+              <Link href="/">
+                <ion-button slot="start">
+                  <ion-icon
+                    slot="start"
+                    ios="chevron-back-outline"
+                    md="arrow-back-sharp"
+                  ></ion-icon>
+                  <ion-label>Notes</ion-label>
+                </ion-button>
+              </Link>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <MobileAndIosButton slot="end" fill="clear">
+                <ion-icon
+                  md="ellipsis-vertical-sharp"
+                  ios="ellipsis-horizontal-circle-outline"
+                ></ion-icon>
+              </MobileAndIosButton>
+            </ion-buttons>
+            <NonMobileIonButtons slot="end">
+              <ion-button color="danger" fill="clear">
+                <ion-label>Delete</ion-label>
+              </ion-button>
+            </NonMobileIonButtons>
+          </ion-toolbar>
+        </ion-header>
+        <StyledIonContent fullscreen>
+          <NoteDetail note={data?.notes_app_notes?.[0]} />
+
+          <MobileIonFab slot="fixed">
+            <ion-fab-button>
+              <ion-icon ios="add-outline" md="add-sharp" />
+            </ion-fab-button>
+          </MobileIonFab>
+        </StyledIonContent>
+        <StyledIonFooter>
+          <ion-toolbar>
+            <ion-buttons slot="end">
+              <NewNoteButtonIos />
+            </ion-buttons>
+          </ion-toolbar>
+        </StyledIonFooter>
+      </>
+    );
+  };
+
+export default withRelay(NotePage, NotePageQuery, {
   // Fallback to render while the page is loading.
   // This property is optional.
   fallback: <ion-progress-bar type="indeterminate" />,
   // Create a Relay environment on the client-side.
   // Note: This function must always return the same value.
-  createClientEnvironment: () => getClientEnvironment()!,
+  createClientEnvironment: () => getClientEnvironment(),
   // Gets server side props for the page.
   // serverSideProps: async (ctx) => {
   //   // This is an example of getting an auth token from the request context.
@@ -138,12 +141,10 @@ export default withRelay(NotePage, IdNotePageQuery, {
   // },
   // Server-side props can be accessed as the second argument
   // to this function.
-  createServerEnvironment: async () =>
-    // ctx,
-    // The object returned from serverSideProps. If you don't need a token
-    // you can remove this argument.
-    // { token }: { token: string }
-    {
-      return createServerEnvironment();
-    },
+  createServerEnvironment: async () => {
+    let { createServerEnvironment } = await import(
+      "../lib/server/relay_server_environment"
+    );
+    return createServerEnvironment();
+  },
 });

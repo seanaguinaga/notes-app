@@ -20,7 +20,7 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
   note,
   titleInputRef,
 }) => {
-  const data = useFragment(
+  let data = useFragment(
     graphql`
       fragment NoteDetailTitle_note on notes_app_notes {
         id
@@ -30,7 +30,7 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
     note
   );
 
-  const [commit, isInFlight] = useMutation<NoteDetailTitleMutation>(graphql`
+  let [commit, isInFlight] = useMutation<NoteDetailTitleMutation>(graphql`
     mutation NoteDetailTitleMutation(
       $id: uuid!
       $data: notes_app_notes_set_input
@@ -45,19 +45,19 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
     }
   `);
 
-  const handleChange = (e: CustomEvent<InputChangeEventDetail>) => {
+  let handleChange = (e: CustomEvent<InputChangeEventDetail>) => {
     if (isInFlight) {
       return;
     }
 
-    if (e.detail.value === data.title) {
+    if (e.detail.value === data?.title) {
       return;
     }
 
     commit({
       optimisticUpdater: (store) => {
-        const noteRecord = store.get(data.id as string);
-        const currentTitle = noteRecord.getValue("title");
+        let noteRecord = store.get(data.id as string);
+        let currentTitle = noteRecord.getValue("title");
         noteRecord.setValue(e.detail.value ?? currentTitle, "title");
         noteRecord.setValue(
           `${new Date(Date.now()).toISOString()}`,

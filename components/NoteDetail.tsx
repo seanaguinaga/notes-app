@@ -1,33 +1,16 @@
 import React, { useRef } from "react";
-import { graphql, usePreloadedQuery } from "react-relay/hooks";
 import NoteDetailText from "./NoteDetailText";
 import NoteDetailTitle from "./NoteDetailTitle";
-import { NoteDetailQuery } from "./__generated__/NoteDetailQuery.graphql";
 
 const NoteDetail = ({ note }) => {
-  const data = usePreloadedQuery<NoteDetailQuery>(
-    graphql`
-      query NoteDetailQuery($id: uuid!) {
-        notes_app_notes(where: { id: { _eq: $id } }) {
-          id
-          ...NoteDetailTitle_note
-          ...NoteDetailText_note
-          updated_at
-          created_at
-        }
-      }
-    `,
-    note
-  );
+  let titleInputRef = useRef<HTMLIonInputElement | null>();
+  let textInputRef = useRef<HTMLIonTextareaElement | null>();
 
-  const titleInputRef = useRef<HTMLIonInputElement | null>();
-  const textInputRef = useRef<HTMLIonTextareaElement | null>();
-
-  const focusTitleInput = () => {
+  let focusTitleInput = () => {
     titleInputRef.current.setFocus();
   };
 
-  const focusTextInput = () => {
+  let focusTextInput = () => {
     textInputRef.current.setFocus();
   };
 
@@ -54,16 +37,10 @@ const NoteDetail = ({ note }) => {
   return (
     <ion-list>
       <ion-item lines="none">
-        <NoteDetailTitle
-          titleInputRef={titleInputRef}
-          note={data?.notes_app_notes?.[0]}
-        />
+        <NoteDetailTitle titleInputRef={titleInputRef} note={note} />
       </ion-item>
       <ion-item lines="none">
-        <NoteDetailText
-          textInputRef={textInputRef}
-          note={data?.notes_app_notes?.[0]}
-        />
+        <NoteDetailText textInputRef={textInputRef} note={note} />
       </ion-item>
     </ion-list>
   );

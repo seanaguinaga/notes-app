@@ -1,3 +1,4 @@
+import { setupConfig } from "@ionic/core";
 import "@ionic/core/css/core.css";
 import "@ionic/core/css/display.css";
 import "@ionic/core/css/flex-utils.css";
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }) {
   const env = relayProps.preloadedQuery?.environment ?? clientEnv!;
 
   useEffect(() => {
+    setupConfig({ mode: "ios" });
     ionDefineCustomElements(window);
   }, []);
 

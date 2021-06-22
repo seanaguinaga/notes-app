@@ -1,10 +1,12 @@
-import React, { Suspense } from "react";
+import React from "react";
+import { usePreloadedQuery } from "react-relay";
 import { RelayProps, withRelay } from "relay-nextjs";
 import styled from "styled-components";
 import NewNoteButtonIos from "../components/NewNoteButtonIos";
 import NotesList from "../components/NotesList";
 import { getClientEnvironment } from "../lib/client_enviroment";
-import indexPageQuery from "../queries/indexPage";
+import NotesListQuery from "../queries/NotesListQuery";
+import { NotesListQuery as TNotesListQuery } from "../queries/__generated__/NotesListQuery.graphql";
 import { media } from "../styles/media";
 
 let StyledIonlist = styled("ion-list")`
@@ -83,12 +85,16 @@ let StyledIonFooter = styled("ion-footer")`
   }
 `;
 
-const Index = (props: RelayProps<{}, any>) => {
+const Index: React.FC<RelayProps<Record<string, unknown>, TNotesListQuery>> = ({
+  preloadedQuery,
+}) => {
+  let data = usePreloadedQuery<TNotesListQuery>(NotesListQuery, preloadedQuery);
+
   return (
-    <Suspense fallback={<ion-progress-bar type="indeterminate" />}>
+    <>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Notes</ion-title>
+          <ion-title data-cy="index-ion-title">Notes</ion-title>
           <NonMobileIonButtons slot="end">
             <NonMobileIonButton>
               <NonMobileIcon slot="start" name="add-sharp" />
@@ -104,13 +110,8 @@ const Index = (props: RelayProps<{}, any>) => {
           </ion-toolbar>
         </ion-header>
         <StyledIonlist>
-          <NotesList notes={props.preloadedQuery} />
+          <NotesList notes_app_notes={data.notes_app_notes} />
         </StyledIonlist>
-        <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-          <ion-fab-button>
-            <ion-icon md="add-sharp" />
-          </ion-fab-button>
-        </ion-fab>
       </ion-content>
       <StyledIonFooter>
         <ion-toolbar>
@@ -119,44 +120,17 @@ const Index = (props: RelayProps<{}, any>) => {
           </ion-buttons>
         </ion-toolbar>
       </StyledIonFooter>
-    </Suspense>
+    </>
   );
 };
-export default withRelay(Index, indexPageQuery, {
-  // This property is optional.
-  error: null,
-  // Fallback to render while the page is loading.
-  // This property is optional.
-  fallback: <ion-progress-bar type="indeterminate" />,
-  // Create a Relay environment on the client-side.
-  // Note: This function must always return the same value.
-  createClientEnvironment: () => getClientEnvironment()!,
-  // Gets server side props for the page.
-  // serverSideProps: async (ctx) => {
-  //   // This is an example of getting an auth token from the request context.
-  //   // If you don't need to authenticate users this can be removed and return an
-  //   // empty object instead.
-  //   const { getTokenFromCtx } = await import("lib/server/auth");
-  //   const token = await getTokenFromCtx(ctx);
-  //   if (token == null) {
-  //     return {
-  //       redirect: { destination: "/login", permanent: false },
-  //     };
-  //   }
 
-  //   return { token };
-  // },
-  // Server-side props can be accessed as the second argument
-  // to this function.
-  createServerEnvironment: async () =>
-    // ctx,
-    // The object returned from serverSideProps. If you don't need a token
-    // you can remove this argument.
-    // { token }: { token: string }
-    {
-      const { createServerEnvironment } = await import(
-        "../lib/server_environment"
-      );
-      return createServerEnvironment();
-    },
+export default withRelay(Index, NotesListQuery, {
+  fallback: <ion-progress-bar type="indeterminate" />,
+  createClientEnvironment: () => getClientEnvironment(),
+  createServerEnvironment: async () => {
+    let { createServerEnvironment } = await import(
+      "../lib/server/relay_server_environment"
+    );
+    return createServerEnvironment();
+  },
 });

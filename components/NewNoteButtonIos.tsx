@@ -6,7 +6,7 @@ import { NewNoteButtonIosMutation } from "./__generated__/NewNoteButtonIosMutati
 const NewNoteButtonIos = () => {
   let router = useRouter();
 
-  const [commit, isInFlight] = useMutation<NewNoteButtonIosMutation>(graphql`
+  let [commit, isInFlight] = useMutation<NewNoteButtonIosMutation>(graphql`
     mutation NewNoteButtonIosMutation {
       insert_notes_app_notes_one(object: {}) {
         id
@@ -14,7 +14,7 @@ const NewNoteButtonIos = () => {
     }
   `);
 
-  const handleCompleted = (data: any) => {
+  let handleCompleted = (data: any) => {
     if (router.query.id) {
       router.replace(`${data.insert_notes_app_notes_one.id}`);
     } else {
@@ -22,7 +22,7 @@ const NewNoteButtonIos = () => {
     }
   };
 
-  const handleClick = () =>
+  let handleClick = () =>
     commit({
       variables: {},
       onCompleted: handleCompleted,
