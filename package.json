@@ -23,6 +23,7 @@
     "react-dom": "^18.0.0-alpha-ed6c091fe-20210701",
     "react-relay": "^11.0.2",
     "relay-nextjs": "^0.1.2",
+    "scheduler": "^0.20.2",
     "styled-components": "file:styled-components-5.2.0.tgz",
     "use-context-selector": "^1.3.7"
   },

@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import { InputChangeEventDetail } from "@ionic/core";
 import { IonInput } from "@ionic/react";
 import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
+import { useIonProgressBar } from "./IonProgressBar";
 import { NoteDetailTitleMutation } from "./__generated__/NoteDetailTitleMutation.graphql";
 import { NoteDetailTitle_note$key } from "./__generated__/NoteDetailTitle_note.graphql";
 
@@ -20,6 +22,8 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
   note,
   titleInputRef,
 }) => {
+  let [present, dismiss] = useIonProgressBar();
+
   let data = useFragment(
     graphql`
       fragment NoteDetailTitle_note on notes {
@@ -51,6 +55,8 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
       return;
     }
 
+    present();
+
     commit({
       optimisticUpdater: (store) => {
         let noteRecord = store.get(data.id as string);
@@ -68,6 +74,8 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
           updated_at: `${new Date(Date.now()).toISOString()}`,
         },
       },
+      onCompleted: dismiss,
+      onError: dismiss,
     });
   };
 

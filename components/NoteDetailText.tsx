@@ -67,8 +67,8 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
           updated_at: `${new Date(Date.now()).toISOString()}`,
         },
       },
-      onCompleted: () => dismiss(),
-      onError: () => dismiss(),
+      onCompleted: dismiss,
+      onError: dismiss,
     });
   };
 
