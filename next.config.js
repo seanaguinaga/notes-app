@@ -20,4 +20,8 @@ module.exports = {
   },
   target: "experimental-serverless-trace",
   projectRoot: __dirname,
+    reactStrictMode: true,
+  experimental: {
+    reactRoot: "concurrent",
+  },
 };
