@@ -9,7 +9,7 @@ interface NotesListItemTitleProps {
 const NotesListItemTitle: React.FC<NotesListItemTitleProps> = ({ note }) => {
   let data = useFragment(
     graphql`
-      fragment NotesListItemTitle_note on notes_app_notes {
+      fragment NotesListItemTitle_note on notes {
         id
         title
       }

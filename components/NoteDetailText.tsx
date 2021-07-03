@@ -16,7 +16,7 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
 }) => {
   let data = useFragment(
     graphql`
-      fragment NoteDetailText_note on notes_app_notes {
+      fragment NoteDetailText_note on notes {
         id
         text
       }
@@ -25,11 +25,8 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
   );
 
   let [commit, isInFlight] = useMutation<NoteDetailTextMutation>(graphql`
-    mutation NoteDetailTextMutation(
-      $id: uuid!
-      $data: notes_app_notes_set_input
-    ) {
-      update_notes_app_notes(where: { id: { _eq: $id } }, _set: $data) {
+    mutation NoteDetailTextMutation($id: uuid!, $data: notes_set_input) {
+      update_notes(where: { id: { _eq: $id } }, _set: $data) {
         returning {
           id
           updated_at

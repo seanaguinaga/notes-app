@@ -17,7 +17,7 @@ interface NotesListItemTextProps {
 const NotesListItemText: React.FC<NotesListItemTextProps> = ({ note }) => {
   let data = useFragment(
     graphql`
-      fragment NotesListItemText_note on notes_app_notes {
+      fragment NotesListItemText_note on notes {
         id
         text
       }

@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import React from 'react';
-import { graphql, useFragment } from 'react-relay/hooks';
-import NotesListItemText from './NotesListItemText';
-import NotesListItemTitle from './NotesListItemTitle';
-import { NotesListItem_note$key } from './__generated__/NotesListItem_note.graphql';
+import Link from "next/link";
+import React from "react";
+import { graphql, useFragment } from "react-relay/hooks";
+import NotesListItemText from "./NotesListItemText";
+import NotesListItemTitle from "./NotesListItemTitle";
+import { NotesListItem_note$key } from "./__generated__/NotesListItem_note.graphql";
 
 interface NotesListItemProps {
   note: NotesListItem_note$key;
@@ -12,7 +12,7 @@ interface NotesListItemProps {
 const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
   let data = useFragment(
     graphql`
-      fragment NotesListItem_note on notes_app_notes {
+      fragment NotesListItem_note on notes {
         id
         ...NotesListItemTitle_note
         ...NotesListItemText_note

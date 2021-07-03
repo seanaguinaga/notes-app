@@ -10,18 +10,18 @@ const NewNoteButtonIos = () => {
 
   let [commit, isInFlight] = useMutation<NewNoteButtonIosMutation>(graphql`
     mutation NewNoteButtonIosMutation {
-      insert_notes_app_notes_one(object: {}) {
+      insert_notes_one(object: {}) {
         id
       }
     }
   `);
 
   let handleCompleted = (data: any) => {
-    setNewNoteID(data.insert_notes_app_notes_one.id);
+    setNewNoteID(data.insert_notes_one.id);
     if (router.query.id) {
-      router.replace(`${data.insert_notes_app_notes_one.id}`);
+      router.replace(`${data.insert_notes_one.id}`);
     } else {
-      router.push(`${data.insert_notes_app_notes_one.id}`);
+      router.push(`${data.insert_notes_one.id}`);
     }
   };
 
@@ -30,8 +30,8 @@ const NewNoteButtonIos = () => {
       variables: {},
       onCompleted: handleCompleted,
       updater: (store) => {
-      store.create(newNoteID, "notes_app_notes");
-      }
+        store.create(newNoteID, "notes");
+      },
     });
 
   return (

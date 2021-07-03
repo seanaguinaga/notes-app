@@ -98,7 +98,7 @@ const NotePage: React.FC<RelayProps<Record<string, unknown>, TNotePageQuery>> =
           </ion-toolbar>
         </ion-header>
         <StyledIonContent fullscreen>
-          <NoteDetail note={data?.notes_app_notes?.[0]} />
+          <NoteDetail note={data?.notes?.[0]} />
 
           <MobileIonFab slot="fixed">
             <ion-fab-button>

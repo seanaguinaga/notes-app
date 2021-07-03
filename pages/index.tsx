@@ -110,7 +110,7 @@ const Index: React.FC<RelayProps<Record<string, unknown>, TNotesListQuery>> = ({
           </ion-toolbar>
         </ion-header>
         <StyledIonlist>
-          <NotesList notes_app_notes={data.notes_app_notes} />
+          <NotesList notes={data.notes} />
         </StyledIonlist>
       </ion-content>
       <StyledIonFooter>
