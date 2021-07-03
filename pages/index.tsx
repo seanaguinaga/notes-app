@@ -92,7 +92,7 @@ const Index: React.FC<RelayProps<Record<string, unknown>, TNotesListQuery>> = ({
 
   return (
     <>
-      <ion-header>
+      <ion-header translucent>
         <ion-toolbar>
           <ion-title data-cy="index-ion-title">Notes</ion-title>
           <NonMobileIonButtons slot="end">
@@ -103,7 +103,7 @@ const Index: React.FC<RelayProps<Record<string, unknown>, TNotesListQuery>> = ({
           </NonMobileIonButtons>
         </ion-toolbar>
       </ion-header>
-      <ion-content>
+      <ion-content fullscreen>
         <ion-header collapse="condense">
           <ion-toolbar>
             <ion-title size="large">Notes</ion-title>

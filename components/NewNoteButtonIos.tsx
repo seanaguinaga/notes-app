@@ -1,12 +1,13 @@
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { graphql, useMutation, useRelayEnvironment } from "react-relay";
+import { graphql, useMutation } from "react-relay";
 import { NewNoteButtonIosMutation } from "./__generated__/NewNoteButtonIosMutation.graphql";
+
+let Loading = dynamic(() => import("./IonLoading"), { ssr: false });
 
 const NewNoteButtonIos = () => {
   let router = useRouter();
-
-  let environment = useRelayEnvironment();
 
   let [newNoteID, setNewNoteID] = useState("");
 
@@ -20,7 +21,6 @@ const NewNoteButtonIos = () => {
 
   let handleCompleted = (data: any) => {
     setNewNoteID(data.insert_notes_one.id);
-
     if (router.query.id) {
       router.replace(`${data.insert_notes_one.id}`);
     } else {
@@ -38,9 +38,11 @@ const NewNoteButtonIos = () => {
     });
 
   return (
-    <ion-button disabled={isInFlight} onClick={handleClick}>
-      <ion-icon icon="create-outline" />
-    </ion-button>
+    <Loading isLoading={isInFlight}>
+      <ion-button disabled={isInFlight} onClick={handleClick}>
+        <ion-icon icon="create-outline" />
+      </ion-button>
+    </Loading>
   );
 };
 

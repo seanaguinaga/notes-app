@@ -1,7 +1,8 @@
 import { InputChangeEventDetail } from "@ionic/core";
-import { IonTextarea } from "@ionic/react";
-import React from "react";
+import { IonLoading, IonTextarea } from "@ionic/react";
+import React, { Suspense } from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
+import { useIonProgressBar } from "./IonProgressBar";
 import { NoteDetailTextMutation } from "./__generated__/NoteDetailTextMutation.graphql";
 import { NoteDetailText_note$key } from "./__generated__/NoteDetailText_note.graphql";
 
@@ -14,6 +15,8 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
   note,
   textInputRef,
 }) => {
+  let [present, dismiss] = useIonProgressBar();
+
   let data = useFragment(
     graphql`
       fragment NoteDetailText_note on notes {
@@ -45,6 +48,8 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
       return;
     }
 
+    present();
+
     commit({
       optimisticUpdater: (store) => {
         let noteRecord = store.get(data.id as string);
@@ -62,18 +67,22 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
           updated_at: `${new Date(Date.now()).toISOString()}`,
         },
       },
+      onCompleted: () => dismiss(),
+      onError: () => dismiss(),
     });
   };
 
   return (
-    <IonTextarea
-      autoGrow
-      value={data?.text}
-      placeholder="Text"
-      debounce={450}
-      onIonChange={handleChange}
-      ref={textInputRef}
-    />
+    <Suspense fallback={<IonLoading isOpen />}>
+      <IonTextarea
+        autoGrow
+        value={data?.text}
+        placeholder="Text"
+        debounce={450}
+        onIonChange={handleChange}
+        ref={textInputRef}
+      />
+    </Suspense>
   );
 };
 
