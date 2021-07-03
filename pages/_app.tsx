@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
 
   const getLayout =
     Component.getLayout ||
-    ((page: ReactNode) => <RootLayout children={page} />);
+    ((page: ReactNode) => <RootLayout>{page}</RootLayout>);
 
   return (
     <RelayEnvironmentProvider environment={env}>

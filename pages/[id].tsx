@@ -71,7 +71,7 @@ const NotePage: React.FC<RelayProps<Record<string, unknown>, TNotePageQuery>> =
         <ion-header translucent>
           <ion-toolbar>
             <ion-buttons>
-              <Link href="/">
+              <Link href="/" passHref>
                 <ion-button slot="start">
                   <ion-icon
                     slot="start"

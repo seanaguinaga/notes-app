@@ -37,7 +37,7 @@ const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
 
   return (
     <ion-item-sliding>
-      <Link href={`/${data.id}`}>
+      <Link href={`/${data.id}`} passHref>
         <ion-item detail={false} lines="full">
           <ion-label class="ion-text-wrap">
             <h2>
