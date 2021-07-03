@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { graphql, useMutation } from "react-relay";
+import { graphql, useMutation, useRelayEnvironment } from "react-relay";
 import { NewNoteButtonIosMutation } from "./__generated__/NewNoteButtonIosMutation.graphql";
 
 const NewNoteButtonIos = () => {
   let router = useRouter();
+
+  let environment = useRelayEnvironment();
 
   let [newNoteID, setNewNoteID] = useState("");
 
@@ -18,6 +20,7 @@ const NewNoteButtonIos = () => {
 
   let handleCompleted = (data: any) => {
     setNewNoteID(data.insert_notes_one.id);
+
     if (router.query.id) {
       router.replace(`${data.insert_notes_one.id}`);
     } else {
@@ -29,7 +32,7 @@ const NewNoteButtonIos = () => {
     commit({
       variables: {},
       onCompleted: handleCompleted,
-      updater: (store) => {
+      optimisticUpdater: (store) => {
         store.create(newNoteID, "notes");
       },
     });
