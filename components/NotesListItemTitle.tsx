@@ -1,21 +1,14 @@
 import React from "react";
-import { graphql, useFragment } from "react-relay/hooks";
-import { NotesListItemTitle_note$key } from "./__generated__/NotesListItemTitle_note.graphql";
+import { useFragment } from "react-relay/hooks";
+import NoteTitleFragment from "../fragments/NoteTitleFragment";
+import { NoteTitleFragment$key } from "../fragments/__generated__/NoteTitleFragment.graphql";
 
 interface NotesListItemTitleProps {
-  note: NotesListItemTitle_note$key;
+  note: NoteTitleFragment$key;
 }
 
 const NotesListItemTitle: React.FC<NotesListItemTitleProps> = ({ note }) => {
-  let data = useFragment(
-    graphql`
-      fragment NotesListItemTitle_note on notes {
-        id
-        title
-      }
-    `,
-    note
-  );
+  let data = useFragment(NoteTitleFragment, note);
 
   return <>{data?.title || "Untitled"}</>;
 };

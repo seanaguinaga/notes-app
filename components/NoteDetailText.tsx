@@ -2,12 +2,13 @@ import { InputChangeEventDetail } from "@ionic/core";
 import { IonLoading, IonTextarea } from "@ionic/react";
 import React, { Suspense } from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
+import NoteTextFragment from "../fragments/NoteTextFragment";
+import { NoteTextFragment$key } from "../fragments/__generated__/NoteTextFragment.graphql";
 import { useIonProgressBar } from "./IonProgressBar";
 import { NoteDetailTextMutation } from "./__generated__/NoteDetailTextMutation.graphql";
-import { NoteDetailText_note$key } from "./__generated__/NoteDetailText_note.graphql";
 
 interface NoteDetailTextProps {
-  note: NoteDetailText_note$key;
+  note: NoteTextFragment$key;
   textInputRef: React.MutableRefObject<HTMLIonTextareaElement>;
 }
 
@@ -17,15 +18,7 @@ const NoteDetailText: React.FC<NoteDetailTextProps> = ({
 }) => {
   let [present, dismiss] = useIonProgressBar();
 
-  let data = useFragment(
-    graphql`
-      fragment NoteDetailText_note on notes {
-        id
-        text
-      }
-    `,
-    note
-  );
+  let data = useFragment(NoteTextFragment, note);
 
   let [commit, isInFlight] = useMutation<NoteDetailTextMutation>(graphql`
     mutation NoteDetailTextMutation($id: uuid!, $data: notes_set_input) {

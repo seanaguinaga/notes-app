@@ -1,27 +1,17 @@
 import Link from "next/link";
 import React from "react";
-import { graphql, useFragment } from "react-relay/hooks";
+import { useFragment } from "react-relay/hooks";
+import NoteCompleteFragment from "../fragments/NoteCompleteFragment";
+import { NoteCompleteFragment$key } from "../fragments/__generated__/NoteCompleteFragment.graphql";
 import NotesListItemText from "./NotesListItemText";
 import NotesListItemTitle from "./NotesListItemTitle";
-import { NotesListItem_note$key } from "./__generated__/NotesListItem_note.graphql";
 
 interface NotesListItemProps {
-  note: NotesListItem_note$key;
+  note: NoteCompleteFragment$key;
 }
 
 const NotesListItem: React.FC<NotesListItemProps> = ({ note }) => {
-  let data = useFragment(
-    graphql`
-      fragment NotesListItem_note on notes {
-        id
-        ...NotesListItemTitle_note
-        ...NotesListItemText_note
-        updated_at
-        created_at
-      }
-    `,
-    note
-  );
+  let data = useFragment(NoteCompleteFragment, note);
 
   let displayDate = new Date(
     (data.updated_at as number) || (data.created_at as number)

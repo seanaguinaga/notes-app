@@ -4,8 +4,8 @@ const NotePageQuery = graphql`
   query NotePageQuery($id: uuid!) {
     notes(where: { id: { _eq: $id } }) {
       id
-      ...NoteDetailTitle_note
-      ...NoteDetailText_note
+      ...NoteTitleFragment
+      ...NoteTextFragment
     }
   }
 `;

@@ -4,9 +4,10 @@ import { IonInput } from "@ionic/react";
 import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import styled from "styled-components";
+import NoteTitleFragment from "../fragments/NoteTitleFragment";
+import { NoteTitleFragment$key } from "../fragments/__generated__/NoteTitleFragment.graphql";
 import { useIonProgressBar } from "./IonProgressBar";
 import { NoteDetailTitleMutation } from "./__generated__/NoteDetailTitleMutation.graphql";
-import { NoteDetailTitle_note$key } from "./__generated__/NoteDetailTitle_note.graphql";
 
 let TitleInput = styled(IonInput)`
   font-size: 22px;
@@ -14,7 +15,7 @@ let TitleInput = styled(IonInput)`
 `;
 
 interface NoteDetailTitleProps {
-  note: NoteDetailTitle_note$key;
+  note: NoteTitleFragment$key;
   titleInputRef: React.MutableRefObject<HTMLIonInputElement>;
 }
 
@@ -24,15 +25,7 @@ const NoteDetailTitle: React.FC<NoteDetailTitleProps> = ({
 }) => {
   let [present, dismiss] = useIonProgressBar();
 
-  let data = useFragment(
-    graphql`
-      fragment NoteDetailTitle_note on notes {
-        id
-        title
-      }
-    `,
-    note
-  );
+  let data = useFragment(NoteTitleFragment, note);
 
   let [commit, isInFlight] = useMutation<NoteDetailTitleMutation>(graphql`
     mutation NoteDetailTitleMutation($id: uuid!, $data: notes_set_input) {

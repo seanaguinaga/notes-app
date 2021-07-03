@@ -1,7 +1,8 @@
 import React from "react";
-import { graphql, useFragment } from "react-relay/hooks";
+import { useFragment } from "react-relay/hooks";
 import styled from "styled-components";
-import { NotesListItemText_note$key } from "./__generated__/NotesListItemText_note.graphql";
+import NoteTextFragment from "../fragments/NoteTextFragment";
+import { NoteTextFragment$key } from "../fragments/__generated__/NoteTextFragment.graphql";
 
 let ListText = styled.p`
   overflow: hidden;
@@ -11,19 +12,11 @@ let ListText = styled.p`
 `;
 
 interface NotesListItemTextProps {
-  note: NotesListItemText_note$key;
+  note: NoteTextFragment$key;
 }
 
 const NotesListItemText: React.FC<NotesListItemTextProps> = ({ note }) => {
-  let data = useFragment(
-    graphql`
-      fragment NotesListItemText_note on notes {
-        id
-        text
-      }
-    `,
-    note
-  );
+  let data = useFragment(NoteTextFragment, note);
 
   return <ListText>{data?.text || "Empty Note"}</ListText>;
 };
