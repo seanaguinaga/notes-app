@@ -16,7 +16,7 @@ const IonLoading: React.FC<{ isLoading: boolean }> = ({
     return () => {
       dismiss();
     };
-  }, [isLoading, present, dismiss]);
+  }, [isLoading]);
 
   return <>{children}</>;
 };
